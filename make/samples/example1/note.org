@@ -1,0 +1,183 @@
+#+title: linux 下进行C编程基础
+* 源程序的编译
+在linux 下，如果要编译一个C源程序，我们要使用 GNU 的gcc 编译器。
+下面我们以一个例子说明如何使用 gcc 编译器。
+如下代码示：
+#+begin_src c
+#include <stdio.h>
+
+int main(int argc, char **argv)
+{
+    printf("hello world!\n");
+}
+#+end_src
+要编译这个程序，我们只要在命令行中执行：
+#+begin_src sh
+$ gcc hello.c -o hello
+#+end_src
+gcc编译器就会为我们生成一个hello的可执行文件，执行./hello 就可以看到
+程序的输出结果。命令行中gcc 表示我们是用gcc 来编译我们的源程序，-o 
+选项表示我们要求编译器输出可执行文件 hello, hello.c 是我们的源程序。
+
+gcc 的 -c 选项表示我们只要求编译器输出目标代码
+gcc 的 -g 选项表示我们要求编译器在编译的时候提供我们以后对程序进行调试的信息
+
+* 简单Makefile 的编写
+假设我们有下面这样一个程序，源码如下：
+#+begin_src c
+// main.c
+#include "s1.h"
+#include "s2.h"
+
+int main(int argc, char **argv)
+{
+    s1_print("hello");
+    s2_print("hello");
+    
+    return 0;
+}
+// s1.h
+#ifndef _S_1_H
+#define _S_1_H
+
+void s1_print(char *str);
+
+#endif // _S_1_H
+// s1.c
+#include <stdio.h>
+
+#include "s1.h"
+
+void s1_print(char *str)
+{
+    printf("s1 print %s\n", str);
+}
+// s2.h
+#ifndef _S_2_H
+#define _S_2_H
+
+void s2_print(char *str);
+
+#endif // _S_2_H
+// s2.c
+#include <stdio.h>
+
+#include "s2.h"
+
+void s2_print(char *str)
+{
+    printf("s2 print %s\n", str);
+}
+#+end_src
+当然由于这个程序很短，我们可以这样来编译
+#+begin_src sh
+$ gcc -c main.c 
+$ gcc -c s1.c
+$ gcc -c s2.c
+$ gcc -o main main.o s1.o s2.o
+#+end_src
+这样的话，我们也可以产生main程序，而且也不是很麻烦，但是如果我们考虑一下，如果
+有一天我们修改了其中的一个文件(比如s1.c) 那么我们难道还要重新输入上面的命令？
+写一个shell 脚本，让她帮我去完成不就可以了。是的，对于这个程序来说，是可以起到
+作用的。但是当我们把事情想的更复杂一些，如果我们的程序有几百个源程序的时候，难
+道也要编译器重新一个一个的去编译？
+
+为些，聪明的程序员我们想出了一个很好的工具来做这件事情，这就是make.我们只要
+执行一下make，就可以把上面的问题解决。在我们执行make之前，我们要先编写一个
+非常重要的文件，Makefile，对于上面的那个程序来说，可能的一个Makefile 文件是：
+#+begin_src sh
+# Makefile
+main: main.o s1.o s2.o
+	gcc -o main main.o s1.o s2.o
+
+main.o: main.c s1.h s2.h
+	gcc -c main.c
+
+s1.o: s1.c s1.h
+	gcc -c s1.c
+
+s2.o: s2.c s2.h
+	gcc -c s2.c
+#+end_src
+有了这个Makefile 文件，不管我们什么时候个性了源程序当中的什么文件，我们只要
+执行make命令，我们的编译器都只会去编译与我们修改的及其相关的文件，其它的文件
+她理都不去理。
+
+下面学习Makefile 是如何编写的，在Makefile中#开始的都是注释行。Makefile中最重
+要的是描述文件的依赖关系的说明。一般的格式是：
+#+begin_src sh
+target: components
+TAB rule
+#+end_src
+第一行表示的是信赖关系，第二行是规则。
+比如我们上面的那个Makefile文件的
+#+begin_src sh
+main: main.o s1.o s2.o
+#+end_src
+表示我们的目标(target) main 的信赖对象(components)是 main.o s1.o s2.o
+当依赖的对象在目标修改以后的时间有修改的话，就要去执行规则行中指定的命令，
+就像我们上面那个
+#+begin_src sh
+	gcc -o main main.o s1.o s2.o
+#+end_src
+注意规则一行中的TAB表示那里是一个TAB键。
+
+Makefile有三个非常有用的变量，分别是$@, $^, $< 
+分别代表的意思是：
+|----+------------------|
+| $@ | 目标文件         |
+|----+------------------|
+| $^ | 所有依赖文件     |
+|----+------------------|
+| $< | 第一个依赖的文件 |
+|----+------------------|
+
+如果我们使用上面三个变量，那么我们可以简化我们的Makefile文件为：
+#+begin_src sh
+main: main.o s1.o s2.o
+	gcc -o $@ $^
+
+main.o: main.c s1.h s2.h
+	gcc -c $<
+
+s1.o: s1.c s1.h
+	gcc -c $<
+
+s2.o: s2.c s2.h
+	gcc -c $<
+
+#+end_src
+简化以后，我们的Makefile 是简单了一些。不过人们有时还想更简单一些。这里
+我们学习一个Makefile 的缺省规则
+
+#+begin_src sh
+.c.o:
+TAB gcc -c $<
+#+end_src
+这个规则表示所有的.o 文件都是依赖于相应的.c文件的。比如s1.o 依赖于s1.c。
+这样 Makefile 还可以写成：
+
+#+begin_src sh
+main: main.o s1.o s2.o
+	gcc -o $@ $^
+.c.o:
+	gcc -c $<
+
+#+end_src
+* 程序库的链接
+对于一前常用的函数实现，gcc 编译器会自动去连接一些常用库。这样我们就没必要
+自己去指定了。有时候我们在编译程序的时候还要指定库的路径。这个时候我们要用到
+编译器的 -L 选项指定路径。比如说我们有一个库在 /home/xx/slib 下，这样我们
+编译的时候还要加上 -L /home/xx/slib
+对于一些标准库来说，我们没有必要指出路径，只要它们在缺省库的路径下就可以。
+系统的缺省库的路径是 /lib /usr/lib /usr/local/lib
+在这三个路径下面的库，我们可以不指定路径。
+
+* 程序的调试
+我们编写的程序不太可能一次性成功，使用 gcc 编译时加 -g 选项，然后
+使用 gdb 进行调试。
+* 头文件和系统求助
+如果我们要查看write 这个函数的说明，当我们执行 man write 时，输出的结果
+却不是我们所需要的。因为我们要的是 write 这个函数的说明，可是出来的却是这个
+命令的说明。为了得到 write 的函数说明我们要用 man 2 write ，2表示我们用的
+write 这个函数是系统调用函数，还有一个我们常用的是3,表示的函数是C库函数。
