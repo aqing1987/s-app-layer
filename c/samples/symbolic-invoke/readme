@@ -1,0 +1,9 @@
+1. compile
+gcc jffs2reset.c -o jffs2reset -g -Wall
+
+2. create symbolic
+ln -s jffs2reset jffs2mark
+
+3. execute test
+./jffs2reset
+./jffs2mark
