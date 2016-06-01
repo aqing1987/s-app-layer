@@ -1,0 +1,57 @@
+#+title: how to use free
+
+* free -m
+show as MB
+
+~$ free -m
+             total       used       free     shared    buffers     cached
+Mem:          3848       2162       1685        163        390        880
+-/+ buffers/cache:        891       2957
+Swap:         3813          0       3813
+
+#+BEGIN_SRC sh
+echo $[ 2162-390-880 ]
+891
+
+echo $[ 1685+390+880 ]
+2957
+#+END_SRC
+
+* explain
+
+|-------------------+-------+------+------+--------+---------+--------|
+|                   | total | used | free | shared | buffers | cached |
+|-------------------+-------+------+------+--------+---------+--------|
+| Mem:              |  3848 | A    | B    |    163 | C       | D      |
+|-------------------+-------+------+------+--------+---------+--------|
+| -/+ buffers/cache |       | X    | Y    |        |         |        |
+|-------------------+-------+------+------+--------+---------+--------|
+| Swap:             |  3813 | 0    | 3813 |        |         |        |
+|-------------------+-------+------+------+--------+---------+--------|
+
+buffers and cache can be freed
+
+// used - buffers - cache
+X = A - C - D
+
+// free + buffers + cache 
+Y = B + C + D
+
+buffers: used to cache data read from harddisk
+
+test by using:
+#+BEGIN_SRC sh
+$ find /
+$ free -m
+$ sleep 1
+$ free -m
+#+END_SRC
+
+cached: used to cache data write to harddisk
+test by using:
+#+BEGIN_SRC sh
+$ free -m
+$ dd if=/dev/zero of=~/a.txt bs=10 count=100M
+$ sleep 1
+$ free -m
+#+END_SRC
