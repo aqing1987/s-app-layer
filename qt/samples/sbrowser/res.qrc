@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/new/images">
+        <file>images/back.png</file>
+        <file>images/forward.png</file>
+        <file>images/refresh.png</file>
+    </qresource>
+</RCC>
