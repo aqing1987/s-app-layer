@@ -1,5 +1,6 @@
 *.o
 *.out
+a.out*
 cscope*
 *Debug
 *Release
