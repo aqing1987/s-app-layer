@@ -20,10 +20,15 @@ int main(int argc, char *argv[])
     printf("sizeof(ss->buf) = %lu\n", sizeof(ss.buf));
     printf("sizeof(pending-1) = %lu\n", sizeof(ss.pending));
 
-#if 1
+#if 0
       // only struct object can operate it's member
     printf("sizeof(pending-2) = %lu\n", sizeof(shared_audio_dat.pending));
 #endif
+
+      // last character is '\0'
+    char map_header[] = "xxb-";
+
+    printf("sizeof(map_header) = %lu\n", sizeof(map_header));
 
     return 0;
 }
