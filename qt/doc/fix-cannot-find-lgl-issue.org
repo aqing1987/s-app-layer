@@ -1,0 +1,7 @@
+#+title: fix cannot find lgl issue
+
+in ubuntu14.04, command below can fix this issue
+
+#+BEGIN_SRC sh
+sudo apt-get install libgl1-mesa-dev
+#+END_SRC
