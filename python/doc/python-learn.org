@@ -1,0 +1,22 @@
+#+title: python learn note
+
+* refs
+http://mooc.study.163.com/course/HIT-1000002017?tid=1000002015#/info
+
+* object and types
+python uses object to store data, each object has its type.
+
+** 5 types
+** string (str)
+   use 'a' or "a"
+** integer (int)
+   21(dec), 025(oct), 0x15(hex)
+** float 
+   1.48, 21.0, 21., .21, 2.1e2
+** boolean (bool)
+   True, False
+** complex
+   1+1j
+
+** check type
+  type(True), type("aa"), type(21.5)
