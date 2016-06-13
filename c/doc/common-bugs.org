@@ -1,0 +1,10 @@
+#+title: common bugs
+
+* Segmentation fault (core dumped)
+** [reason-1] cast to pointer from integer of different size
+*** info
+warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+     p_node_now->len = *(uint32_t *)p_root->p_buf[offset+NODE_TYPE_SIZE];
+     
+*** solve
+   p_node_now->len = *(uint32_t *)&p_root->p_buf[offset+NODE_TYPE_SIZE];
