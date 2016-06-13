@@ -1,0 +1,70 @@
+#+title: memory alignment test
+* Conclusion
+Make sure memory alignment by 4 bytes. Especially for Embedded
+development.
+
+* Test Program
+#+BEGIN_SRC c
+#include <stdio.h>
+
+// not alignment for 4B
+
+int main()
+{
+    int i = 0;
+    unsigned char buf[8];
+
+    for (i = 0; i < 8; i++) {
+        buf[i] = i;
+        printf("buf[%d] = 0x%x\n", i, buf[i]);
+    }
+
+    for (i = 0; i < 5; i++)
+        printf("*(int *)&buf[%d] = 0x%x\n", i, *(int *)&buf[i]);
+    
+    return 0;
+}
+#+END_SRC
+
+* Memory Alignment in ubuntu14.04 i386
+** kernel version
+3.13.0-62-generic
+** result
+#+BEGIN_SRC text
+buf[0] = 0x0
+buf[1] = 0x1
+buf[2] = 0x2
+buf[3] = 0x3
+buf[4] = 0x4
+buf[5] = 0x5
+buf[6] = 0x6
+buf[7] = 0x7
+*(int *)&buf[0] = 0x3020100
+*(int *)&buf[1] = 0x4030201
+*(int *)&buf[2] = 0x5040302
+*(int *)&buf[3] = 0x6050403
+*(int *)&buf[4] = 0x7060504
+#+END_SRC
+
+* Memory Alignment in Arm DM368
+** kernel version 
+2.6.37_IPNC_DM368_5.1.0_R001
+** result
+#+BEGIN_SRC text
+buf[0] = 0x0
+buf[1] = 0x1
+buf[2] = 0x2
+buf[3] = 0x3
+buf[4] = 0x4
+buf[5] = 0x5
+buf[6] = 0x6
+buf[7] = 0x7
+*(int *)&buf[0] = 0x3020100
+*(int *)&buf[1] = 0x30201
+*(int *)&buf[2] = 0x1000302
+*(int *)&buf[3] = 0x2010003
+*(int *)&buf[4] = 0x7060504
+#+END_SRC
+
+we can see when we reference 4B content from &buf[1], &buf[2] and &buf[3],
+we get the wrong value.
