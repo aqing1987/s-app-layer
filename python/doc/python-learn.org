@@ -20,3 +20,34 @@ python uses object to store data, each object has its type.
 
 ** check type
   type(True), type("aa"), type(21.5)
+* Arithmetic Operators
+
+|--------+--------------------------+-----------|
+| symbol | meaning                  | example   |
+|--------+--------------------------+-----------|
+| +      | addition                 | 10+20=30  |
+|--------+--------------------------+-----------|
+| -      | subtraction              | 10-20=-10 |
+|--------+--------------------------+-----------|
+| *      | multiplication           | 10*20=200 |
+|--------+--------------------------+-----------|
+| /      | division(floor division) | 10/2=5    |
+|--------+--------------------------+-----------|
+| %      | modulus                  | 10%3=1    |
+|--------+--------------------------+-----------|
+| **     | exponent                 | 2**3=8    |
+|--------+--------------------------+-----------|
+
+* module
+
++ import math module
+  import math
+
++ check match module
+  dir(math)
+
++ invoke
+  math.pi
+
++ check help
+  help(math.sin)
