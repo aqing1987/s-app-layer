@@ -1,0 +1,17 @@
+#+title: compile steps
+
+1. preprocess
+# -E Preprocess only; do not compile, assemble or link
+gcc -E tt.c -o tt.i
+
+2. compile
+# -S Compile only; do not assemble or link
+gcc -S tt.c -o tt.s
+
+3. assemble
+# -c Compile and assemble, but do not link
+gcc -c tt.c -o tt.o
+
+4. link
+# -o <file> Place the output into <file>
+gcc tt.c -o tt
