@@ -1,0 +1,39 @@
+#+title: shell usage
+
+* command w
+#+BEGIN_SRC sh
+➜  ~ w
+ 23:13:23 up  1:48,  4 users,  load average: 1.45, 1.53, 0.91
+USER     TTY      FROM             LOGIN@   IDLE   JCPU   PCPU WHAT
+re-x     :0       :0               21:25   ?xdm?  14:44   0.19s init --user
+re-x     pts/0    :0               21:27    7:07  45.43s  1.03s zsh
+re-x     pts/11   :0               23:13    1.00s  0.13s  0.00s w
+re-x     pts/23   :0               23:08    4:46   0.14s  0.14s zsh
+#+END_SRC
+* tty
+control terminal
+
+** change from GUI to char terminal
+ctrl+alt+F1 - switch to char terminal tty1
+ctrl+alt+F2 - switch to char terminal tty2
+ctrl+alt+F3 - switch to char terminal tty3
+ctrl+alt+F4 - switch to char terminal tty4
+ctrl+alt+F5 - switch to char terminal tty5
+ctrl+alt+F6 - switch to char terminal tty6
+
+** switch from char terminal to char terminal or GUI
+alt + F1 - switch to char terminal tty1
+alt + F2 - switch to char terminal tty2
+alt + F3 - switch to char terminal tty3
+alt + F4 - switch to char terminal tty4
+alt + F5 - switch to char terminal tty5
+alt + F6 - switch to char terminal tty6
+
+alt + F7 - switch to GUI
+
+* pts
+virtual terminal
+
+once a terminal invoked in GUI, there will be one more pts generated.
+* shell prompt
+user @ hostname current-dir
