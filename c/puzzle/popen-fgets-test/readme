@@ -1,0 +1,21 @@
+task:
+
+test if unrelated echo will be captured by fgets after popen
+
+
+The popen() function opens a process by creating a pipe, forking, and
+invoking the shell.
+
+The popen() function returns NULL if the fork(2) or pipe(2) calls fail,
+or if it cannot allocate memory.
+
+if command "xxx" not exist
+
+fp = popen("xxx", "r");
+fp still valid, but output "sh: 1: xxx: not found"
+
+test steps:
+1. ./echo-always.sh
+2. ./check-sh-result
+
+only sync-s echo can be captured by fgets after popen.
