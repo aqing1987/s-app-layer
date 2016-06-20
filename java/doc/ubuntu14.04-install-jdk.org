@@ -1,0 +1,43 @@
+#+title: ubuntu 14.04 x64 install jdk
+
+* download jdk
+download jdk-8u91-linux-x64.tar.gz from
+http://www.oracle.com/technetwork/java/javase/downloads/index-jsp-138363.html
+
+* install
+** put to /opt
+#+BEGIN_SRC sh
+sudo tar zxvf ./jdk-8u91-linux-x64.gz  -C /opt
+#+END_SRC
+
+** config jdk environment
+#+BEGIN_SRC sh
+vi ~/.bashrc
+#+END_SRC
+
+add content below to the end of the file
+#+BEGIN_SRC sh
+export JAVA_HOME=/opt/jdk1.8.0_91
+export JRE_HOME=${JAVA_HOME}/jre 
+export CLASSPATH=.:${JAVA_HOME}/lib:${JRE_HOME}/lib 
+export PATH=${JAVA_HOME}/bin:$PATH
+#+END_SRC
+
+enable it by using
+#+BEGIN_SRC sh
+source ~/.bashrc
+#+END_SRC
+
+** config default jdk
+#+BEGIN_SRC sh
+sudo update-alternatives --install /usr/bin/java java /opt/jdk1.8.0_91/bin/java 300
+sudo update-alternatives --install /usr/bin/javac javac /opt/jdk1.8.0_91/bin/javac 300
+#+END_SRC
+
+* test
+#+BEGIN_SRC sh
+java -version
+java version "1.8.0_91"
+Java(TM) SE Runtime Environment (build 1.8.0_91-b14)
+Java HotSpot(TM) 64-Bit Server VM (build 25.91-b14, mixed mode)
+#+END_SRC
