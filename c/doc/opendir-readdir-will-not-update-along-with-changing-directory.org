@@ -1,0 +1,104 @@
+#+TITLE: Linux Opendir and readdir will not update along with directory changing
+
+* Result
+According to my experiment, *opendir()* will just record a static state of opened 
+directory. During the *readdir()* operation, if you add/remove a file to the 
+directory opened by *opendir()*, *readdir()* knows nothing about it.
+
+* temporary fix method
+use *access()* to judge if some file existed.
+
+* Test
+
++ touch files
+~ddd$ touch a.tmp b.tmp c.tmp a.aa b.aa
+
++ test
+./readdir-test ddd
+#+begin_src info
+*******************************
+a.aa  a.tmp  b.aa  b.tmp  c.tmp
+*******************************
+[0], full name is ddd/a.aa
+[1], full name is ddd/..
+[2], full name is ddd/c.tmp
+=====================================
+all .aa deleted.
+a.tmp  b.tmp  c.tmp
+=====================================
+[3], full name is ddd/b.aa // shouldn't show b.aa now
+ddd/b.aa not exist.
+[4], full name is ddd/b.tmp
+rm: cannot remove `ddd/*.aa': No such file or directory
+=====================================
+all .aa deleted.
+a.tmp  b.tmp  c.tmp
+=====================================
+[5], full name is ddd/.
+[6], full name is ddd/a.tmp
+rm: cannot remove `ddd/*.aa': No such file or directory
+=====================================
+all .aa deleted.
+a.tmp  b.tmp  c.tmp
+=====================================
+#+end_src
+
+
++ code as below
+#+begin_src c
+#include <stdio.h>
+#include <sys/types.h>
+#include <string.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <dirent.h>
+
+int main(int argc, char *argv[])
+{
+    DIR *pdir = NULL;
+    struct dirent *pdirent = NULL;
+    char fname[256];
+    char cmd[256];
+    static int i = 0;
+
+    if (argc != 2) {
+        printf("Usage: %s dir\n", argv[0]);
+        return -1;
+    }
+    
+    pdir = opendir(argv[1]);
+    if (pdir == NULL)
+        return -1;
+
+    printf("*******************************\n");
+    sprintf(cmd, "ls %s", argv[1]);
+    system(cmd);
+    printf("*******************************\n");
+
+    while ((pdirent = readdir(pdir)) != NULL) {
+
+        sprintf(fname, "%s/%s", argv[1], pdirent->d_name);
+        printf("[%d], full name is %s\n", i++, fname);
+
+        if (access(fname, F_OK) != 0) {
+            printf("%s not exist.\n", fname);
+            continue;
+        }
+
+        if (strncmp(fname+strlen(fname)-4, ".tmp", 4) == 0) {
+
+            sprintf(cmd, "rm %s/*.aa", argv[1]);
+            system(cmd);
+            
+            printf("=====================================\n");
+            printf("all .aa deleted.\n");
+            sprintf(cmd, "ls %s", argv[1]);
+            system(cmd);
+            printf("=====================================\n");
+        }
+    }
+    closedir(pdir);
+    
+    return 0;
+}
+#+end_src
