@@ -67,6 +67,11 @@ int main(int argc, char *argv[])
     // check result
     // Note: fseek is no use for fopen with "ab"
     // still write to the end of the file
+    // reason:
+    // the unix system provides an atomic way to do this operation if
+    // we set the O_APPEND flag when a file is opend. This causes the
+    // kernel to position the file to its current end of file before
+    // each write.
     read_binary_file_content(FNAME, 12);
 
     return 0;
