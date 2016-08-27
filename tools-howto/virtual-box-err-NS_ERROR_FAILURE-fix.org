@@ -1,0 +1,21 @@
+#+title: Virtual box error NS_ERROR_FAILURE (0x80004005) fix
+#+options: ^:nil
+
+* issue description
+after ubuntu upgraded from 14.04 to 16.04, I cannot boot virtualbox anymore.
+
+The error info as below:
+#+BEGIN_SRC sh
+The VM session was aborted.  
+Result Code:  NS_ERROR_FAILURE (0x80004005)
+#+END_SRC
+
+* solution
+Re-setup the virtualbox kernel module by executing
+
+#+BEGIN_SRC sh
+sudo /etc/init.d/vboxdrv setup
+#+END_SRC
+
+* reason
+The virtualbox linux kernel driver mismatched the newly upgraded kernel.
