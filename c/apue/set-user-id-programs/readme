@@ -1,0 +1,15 @@
+
+1. compile 8-14 into the executable file tsys
+2. compile 8-15 into the executable file printuids
+3.
+$ tsys printuids
+$ su
+# chown root tsys
+# chmod u+s tsys
+# ls -l tsys
+# exit
+$ tsys printuids
+
+Note: When /bin/sh is bash version 2, the previous example doesn't
+work, because bash will reset the effective user ID to the real user
+ID when they don't match.
