@@ -1,0 +1,14 @@
+#+title: gitlab branch operation
+#+options: ^:nil
+
+* push local branch to gitlab server
+#+BEGIN_SRC sh
+git checkbout -b branch_name
+== modification, commit ==
+git push origin branch_name
+#+END_SRC
+
+* delete remote branch
+#+BEGIN_SRC sh
+git push origin :branch_name
+#+END_SRC
