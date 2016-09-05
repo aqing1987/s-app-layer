@@ -1,0 +1,85 @@
+#+title: ubuntu16.04 install shadowsocks-qt5 
+#+options: ^:nil
+
+* references
+https://github.com/shadowsocks/shadowsocks-qt5
+https://github.com/shadowsocks/shadowsocks-qt5/wiki/Compiling
+
+* compile
+** qt5-base >= 5.2
+#+BEGIN_SRC sh
+sudo apt-get install qtbase5-dev
+#+END_SRC
+
+** qrencode
+#+BEGIN_SRC sh
+sudo apt-get install libqrencode-dev
+#+END_SRC
+
+** libqtshadowsocks >=1.9.0
+*** Qt >=5.2
+*** Botan >= 1.10
+#+BEGIN_SRC sh
+sudo apt-get install libbotan1.10-dev
+#+END_SRC
+*** gcc >= 4.7 (supports C++11 features)
+#+BEGIN_SRC sh
+gcc -v
+gcc version 5.4.0 20160609
+#+END_SRC
+
+*** do compile now
+download libqtshadowsocks from
+https://github.com/shadowsocks/libQtShadowsocks/releases
+
+#+BEGIN_SRC sh
+cd ~/software/libQtShadowsocks-1.9.0
+qmake # to generate Makefile
+make
+sudo make install
+#+END_SRC
+
+The above procedures will compile and install both libQtShadowsocks and
+shadowsocks-libQtShadowsocks.
+
+** zbar
+#+BEGIN_SRC sh
+sudo apt-get install libzbar-dev
+#+END_SRC
+
+** libappindicator
+#+BEGIN_SRC sh
+sudo apt-get install libappindicator1
+sudo apt-get install appindicator-dev
+#+END_SRC
+
+** compile now
+download:
+#+BEGIN_SRC sh
+git clone https://github.com/shadowsocks/shadowsocks-qt5.git
+cd open-src/shadowsocks-qt5
+qmake INSTALL_PREFIX=/usr
+make
+sudo make install
+#+END_SRC
+
+* how to run
+#+BEGIN_SRC sh
+ss-qt5
+#+END_SRC
+
+config.ini is located under ~/.config/shadowsocks-qt5
+
+get account from 
+http://www.ishadowsocks.org/
+
+
+* error fix
+** could not exec '/usr/lib/x86_64-linux-gnu/qt4/bin/qmake'
+➜  libQtShadowsocks-1.9.0 qmake 
+qmake: could not exec '/usr/lib/x86_64-linux-gnu/qt4/bin/qmake': No such file or directory
+
+fix:
+#+BEGIN_SRC sh
+sudo apt-get install qt5-default
+#+END_SRC
