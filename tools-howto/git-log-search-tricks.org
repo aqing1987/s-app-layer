@@ -1,0 +1,22 @@
+#+title: git log search tricks
+
+#+begin_src sh
+# check pointed auther commit
+git log --author="Author Name"
+
+# check pointed period commit
+git log --since="2012-2-23" --before="2012-2-24"
+
+# search in commit messages
+git log --grep="key word"
+
+# check commit on branch not master
+git log branch --not master
+
+# check pointed "string" in some commit
+git log -S "string"
+
+# check all commit messages about one file
+git log -p filename
+
+#+end_src
