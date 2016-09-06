@@ -1,0 +1,25 @@
+#+TITLE: how to check single file changes by git
+
+* check single file changes
+#+BEGIN_SRC sh
+$ git log --pretty=oneline filename
+
+e.g.
+ee8c89d26dc735008c18545200cbe5bcbf83cc7f [git] Staging Modified Files
+66d73c762cdab5f6f55e2042756a2c8fd365cb79 [git] Tracking New Files
+97c885b3bedf24fab5680cf2708774e9eb959ec1 [git] Checking the Status of Your Files
+4ae0488194210dc6b304aeff8781ad4db88fa27a [git] Getting a Git Repository
+#+END_SRC
+
+* check pointed change by sha1
+#+BEGIN_SRC sh
+$ git show sha1
+
+e.g.
+git show 66d73
+#+END_SRC
+* check single file's pointed commit
+#+begin_src sh
+git show 4ae0488194210dc6b304aeff8781ad4db88fa27a filename
+#+end_src
+
