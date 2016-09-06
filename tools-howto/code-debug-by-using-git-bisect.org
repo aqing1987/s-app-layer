@@ -1,0 +1,70 @@
+#+title: code debug by using git bisect
+
+* steps
+#+BEGIN_SRC sh
+# start
+$ git bisect start
+
+# mark current commit is bad
+$ git bisect bad
+
+# mark which commit is good
+$ git bisect goot 0dd0811
+
+#+END_SRC
+
+after the operations above, git has checked out the commit which 
+equals (start - 0dd0811)/2
+
+then is this commit, check if it is good. If this commit is ok,
+then we do the followings:
+
+#+BEGIN_SRC sh
+$ git bisect good
+#+END_SRC
+
+If we find this commit is bad, mark it. 
+#+BEGIN_SRC sh
+$ git bisect bad
+#+END_SRC
+
+after mark the bad, continue to the next middle commit.
+
+till we find the good one
+#+BEGIN_SRC sh
+$ git bisect good
+#+END_SRC
+
+then git will show the first bad commit. e.g.
+#+BEGIN_SRC code
+$ git bisect good 
+cfe377576b84869e126d6872a30ce117e7151cfb is the first bad commit
+#+END_SRC
+
+Check the error reason now.
+Once done, restore to the default HEAD.
+
+#+BEGIN_SRC sh
+$ git bisect reset
+#+END_SRC
+
+* work model
+# start
+git bisect start
+
+# mark head and tail
+git bisect bad
+git bisect good [commit-sh1]
+
+# find the first bad process
+while (1) {
+   if (bad) {
+      git bisect bad
+   } else {
+      git bisect good
+      break
+   }
+}
+
+# end
+git bisect reset
