@@ -1,0 +1,17 @@
+#+title: scp stalled solution
+
+* description
+When transferring large files(for example mksysb images) usingscp through a 
+firewall, the scp connection stalls.
+
+* cause
+The reason for scp to stall, is because scp greedily grabs asmuch bandwith of 
+the network as possible when it transfers files,any delay caused by the 
+network switch of the firewall can easilymake the TCP connection stalled.
+
+* Solution
+There’s a solution to this problem: Add “-l 8192″ to the scpcommand.
+
+Adding the option “-l 8192″ limits the scp session bandwith upto 
+8192 Kbit/second, which seems to work safe and fast enough 
+(upto 1 MB/second)
