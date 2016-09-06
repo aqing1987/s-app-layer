@@ -1,0 +1,16 @@
+#+TITLE: how to use ssh key with github
+
+* ref
+https://help.github.com/articles/generating-ssh-keys/
+
+* generate ssh key
+$ ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
+
+* add to github
+settings -> ssh and gpg keys -> new ssh key ->
+copy ~/.ssh/id_rsa.pub content to it -> save
+
+* clone with ssh protocol
+#+BEGIN_SRC sh
+$ git clone git@github.com:user/project.git
+#+END_SRC
