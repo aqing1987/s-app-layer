@@ -1,0 +1,11 @@
+#+title: git export historical file
+#+options: ^:nil
+
+#+BEGIN_SRC sh
+git show <commit>:<file> > new_name
+#+END_SRC
+
+e.g.
+#+BEGIN_SRC sh
+git show d06b1cf09d2:text.txt > test1.txt
+#+END_SRC
