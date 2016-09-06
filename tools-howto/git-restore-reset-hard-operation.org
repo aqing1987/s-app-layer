@@ -1,0 +1,51 @@
+#+title: how to restore 'git reset --hard' operations
+
+* emulate git reset --hard
+** generate two commits
+#+begin_src sh
+$ mkdir tt; cd tt
+$ git init
+$ touch foo.txt
+$ git add foo.txt
+$ git commit -m "init"
+$ echo "data" >> foo.txt
+$ git commit -a -m "data"
+#+end_src
+
+** check the commits
+#+begin_src sh
+tt$ git log --pretty=oneline 
+48152f95f5e993ab167a02e76b43fa998c40b750 data
+a8daade8ffd7a4ccf23b145c7a380391068e8ed2 init
+#+end_src
+
+** reset --hard to the first commit
+#+begin_src sh
+tt$ git reset --hard a8daade
+HEAD is now at a8daade init
+
+tt$ git log --pretty=oneline 
+a8daade8ffd7a4ccf23b145c7a380391068e8ed2 init
+#+end_src
+
+* restore to the second commit (lost after 'git reset --hard')
+** check reflog
+reflog will note down all HEAD history. The 'reset', 'checkout'
+operations will be noted in reflog.
+
+#+begin_src sh
+tt$ git reflog 
+a8daade HEAD@{0}: reset: moving to a8daade
+48152f9 HEAD@{1}: commit: data
+a8daade HEAD@{2}: commit (initial): init
+#+end_src
+
+** restore
+#+begin_src sh
+tt$ git reset --hard 48152f9
+HEAD is now at 48152f9 data
+
+tt$ git log --pretty=oneline 
+48152f95f5e993ab167a02e76b43fa998c40b750 data
+a8daade8ffd7a4ccf23b145c7a380391068e8ed2 init
+#+end_src
