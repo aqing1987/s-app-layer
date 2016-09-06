@@ -1,0 +1,19 @@
+#+title: git auto complete config
+
+* refs
+https://git-scm.com/book/en/v1/Git-Basics-Tips-and-Tricks
+https://github.com/git/git/blob/master/contrib/completion/git-completion.bash
+
+* config
+#+begin_src sh
+$ cd ~/software/git-2.5.5/contrib/completion
+$ cp git-completion.bash ~/.git-completion.bash
+
+#+end_src
+
+add code below to .bashrc
+#+begin_src sh
+source ~/.git-completion.bash
+#+end_src
+
+
