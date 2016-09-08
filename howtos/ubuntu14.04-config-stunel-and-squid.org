@@ -1,0 +1,184 @@
+#+TITLE: What's Stunnel
+
+official site: 
+https://www.stunnel.org/index.html
+
+The Stunnel program is designed to work as an SSL encryption wrapper 
+between remote client and local (inetd startable) or remote server. It can
+be used to add SSL functionality to commonly used inetd daemon like POP2,
+POP3, and IMAP servers without any changes in the program's code.
+
+What Stunnel basically does is that it turns any insecure TCP port into a
+secure encrypted port using OpenSSL package for cryptography. It's somehow
+like a small secure VPN that runs on specific ports.
+
+* Install Stunnel on your VPS
+#+BEGIN_SRC sh
+$ sudo apt-get install stunnel4
+#+END_SRC
+
+* Configure Stunnel on the VPS
+Stunnel configures itself using a file named "stunnel.conf" which by default
+is located in "/etc/stunnel".
+
+Create a "stunnel.conf" file in the "/etc/stunnel" directory
+#+BEGIN_SRC sh
+$ sudo nano /etc/stunnel/stunnel.conf
+#+END_SRC
+
+We're going to use a SSL certificate to identify ourselves to the server
+so we have to set the path to that certificate in "stunnel.conf" file
+using this line:
+
+#+BEGIN_SRC note
+cert = /etc/stunnel/stunnel.pem
+#+END_SRC
+
+Next we specify a service for use with Stunnel. It can be any of the ser-
+vices which use networking such as mail server, proxy server, etc.
+
+Here is an example we're going to secure traffics between Squid proxy server
+and a client using Stunnel. We'll explain how to install and configure 
+Squid later.
+
+After setting a name for the service you're going to use, you must tell
+Stunnel to listen on which port for that service. This can be any of the
+65535 ports, as long as it's not blocked by another service or firewall.
+
+#+BEGIN_SRC info
+[squid]
+accept=8888
+#+END_SRC
+
+Then, depending on the service you're going to use the secure tunnel on,
+you must specify the port and IP address of that in the configuration file
+Basically Stunnel takes packets from a secure port and then forwards it to
+the port and IP address of the service you specified.
+
+Squid proxy by default runs on localhost and port 3128 so we have to tell
+Stunnel to forward accepted connections to that port:
+
+#+BEGIN_SRC info
+connect=127.0.0.1:3128
+#+END_SRC
+
+So overall the "stunnel.conf" file must contain the lines below:
+
+#+BEGIN_SRC info
+client=no
+cert=/etc/stunnel/stunnel.pem
+
+[squid]
+accept=8888
+connect=127.0.0.1:3128
+#+END_SRC
+* Create SSL Certificates
+Stunnel uses SSL certificate to secure its connections, which you can easily
+create using the OpenSSL package:
+
+#+BEGIN_SRC sh
+$ openssl genrsa -out key.pem 2048
+$ openssl req -new -x509 -key key.pem -out cert.pem -days 1095
+$ cat key.pem cert.pem >> /etc/stunnel/stunnel.pem
+#+END_SRC
+
+Basically, the commands above is for creating a private key, creating a 
+certificate using that key and combining the two of them into one file
+named "stunnel.pem" to use with stunnel.
+
+*Note*: When creating the certificate, you will be asked for some informa-
+tion such as country and state, which you can enter whatever you like but
+when asked for "Common Name" you must enter the correct host name or IP
+address of your droplet (VPS).
+
+Also, enable Stunnel automatic startup by configuring the "/etc/default/
+stunnel4" file.
+
+#+BEGIN_SRC sh
+$ sudo nano /etc/default/stunnel4
+#+END_SRC
+And change *ENABLED* to 1.
+
+Finally, restart Stunnel for configuration to take effect.
+#+BEGIN_SRC sh
+$ sudo /etc/init.d/stunnel4 restart
+#+END_SRC
+
+* Install Squid Proxy
+#+BEGIN_SRC sh
+$ sudo apt-get install squid3
+#+END_SRC
+
+* Configure Stunnel in Client
+
+In order for Stunnel to communicate with the server, the SSL certificate
+we created in `Create SSL Certificates' must be present at the client.
+Copy the "bstunnel.pem" file from server.
+
+Install Stunnel in any place you like. Then go to the Stunnel folder and
+move the downloaded certificate "stunnel.pem" to Stunnel folder.
+
+Create a "stunnel.conf" file in the Stunnel’s folder if one does not exist.
+
+First of all, we tell Stunnel our certificate’s path, which in Windows is 
+in the Stunnel’s directory (reminder: in Ubuntu it is in "/etc/stunnel/" 
+directory):
+
+#+BEGIN_SRC info
+cert = stunnel.pem
+#+END_SRC
+
+Since we are going to set up a client, we have to tell Stunnel that this 
+is a client. Put the line below in the configuration file:
+
+#+BEGIN_SRC info
+client = yes
+#+END_SRC
+
+Then just like the server, we must specify configuration of the service 
+we want to use.
+
+First we specify the service’s name, then the IP address and port, which 
+Stunnel should listen to on the client:
+
+#+BEGIN_SRC info
+[squid]
+accept = 127.0.0.1:8080
+#+END_SRC
+The accept port could be any port on the client computer, as long as it’s 
+not occupied by another service or blocked by a firewall.
+
+Next, we tell Stunnel to forward packets coming to this port to our Stunnel
+server’s IP address and port. The IP address is your server’s (droplet) 
+public IP address, which is assigned to you when setting up a droplet, 
+and port is the port you specified when configuring Stunnel in the server.
+In our case it was 8888 so we’re going to tell Stunnel to connect to 
+that port:
+
+#+BEGIN_SRC info
+connect = [Server’s Public IP]:8888
+#+END_SRC
+
+So the final "stunnel.conf" file in the client should look like this:
+
+#+BEGIN_SRC info
+cert = stunnel.pem
+client = yes
+[squid]
+accept = 127.0.0.1:8080
+connect = [Server’s Public IP]:8888
+#+END_SRC
+
+Save and close the file and run "stunnel.exe".
+
+That’s it. Now our client is configured to communicate securely with the
+virtual server using a secure SSL tunnel. From now on when trying to 
+connect to any service on our VPS, instead of connecting directly to IP 
+address of server, we *must use the IP address and port* specified in the 
+Stunnel’s "*accept*" *part* of configuration for each service.
+
+As an example, when we want to connect to Squid proxy on our cloud server,
+we must configure our *client to connect to 127.0.0.1:8080*, and Stunnel 
+automatically connects us through a secure tunnel to the service specified
+for that port. Here you can configure your web browser to use IP 127.0.0.1 
+and port 8080 as a proxy to secure your web traffic.
