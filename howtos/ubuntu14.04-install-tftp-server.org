@@ -1,0 +1,26 @@
+#+TITLE: ubuntu 14.04 install tftp server
+
+* install
+#+begin_src sh
+sudo apt-get install tftpd-hpa
+sudo mkdir /var/tftpboot
+sudo chmod 777 /var/tftpboot
+#+end_src
+
+* config
+#+begin_src sh
+sudo vim /etc/default/tftpd-hpa
+#+end_src
+
+#+begin_c options
+# /etc/default/tftpd-hpa 
+TFTP_USERNAME="tftp" 
+TFTP_DIRECTORY="/var/tftpboot"
+TFTP_ADDRESS="[::]:69" 
+TFTP_OPTIONS="--secure"
+#+end_c
+
+#+begin_src sh
+sudo service tftpd-hpa restart
+#+end_src
+
