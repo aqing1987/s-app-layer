@@ -1,0 +1,49 @@
+#+title: ubuntu14.04 install ftp server
+
+* install
+#+BEGIN_SRC sh
+sudo apt-get install vsftpd
+#+END_SRC
+
+* config
+#+BEGIN_SRC sh
+sudo vi /etc/vsftpd.conf
+#+END_SRC
+
+#+BEGIN_SRC sh
+anonymous_enable=NO
+local_enable=YES
+write_enable=YES
+chroot_local_user=YES
+local_root=/home/ftp
+#+END_SRC
+
+* add ftp user
+#+BEGIN_SRC sh
+sudo useradd -d /home/ftp -M ftpuser
+sudo passwd ftpuser
+#+END_SRC
+
+* fix issue for 500 OOPS: vsftpd: refusing to run with writable root inside chroot()
+#+BEGIN_SRC sh
+sudo chmod a-w /home/ftp
+sudo mkdir /home/ftp/data
+#+END_SRC
+
+* config /etc/pam.d/vsftpd
+#+BEGIN_SRC sh
+sudo vi /etc/pam.d/vsftpd
+
+# cancel line below
+#auth    required pam_shells.so
+#+END_SRC
+* restart
+#+BEGIN_SRC sh
+sudo service vsftpd restart
+#+END_SRC
+* test
+1. web
+   ftp://localhost/data
+
+2. uci download
+   curl ftp://server_ip/data/xx.bin -u user:pass -o /tmp/xx.bin
