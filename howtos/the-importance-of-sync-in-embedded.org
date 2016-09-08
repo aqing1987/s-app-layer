@@ -1,0 +1,40 @@
+#+TITLE: The Importance of Sync in Embedded
+
+* My experience
+When I modify /etc/init.d/rcS in development board, and restart
+the board once I have modified it, the modification disappear !!
+
+* Solution
+Before reboot, use 
+#+BEGIN_SRC sh
+# sync
+#+END_SRC 
+especially for newly modified config files, e.g. rcS
+
+* Sync Info
+use
+#+BEGIN_SRC sh
+$ info coreutils 'sync'
+#+END_SRC
+
+#+BEGIN_SRC info
+14.4 `sync': Synchronize data on disk with memory
+=================================================
+
+`sync' writes any data buffered in memory out to disk.  This can
+include (but is not limited to) modified superblocks, modified inodes,
+and delayed reads and writes.  This must be implemented by the kernel;
+The `sync' program does nothing but exercise the `sync' system call.
+
+   The kernel keeps data in memory to avoid doing (relatively slow) disk
+reads and writes.  This improves performance, but if the computer
+crashes, data may be lost or the file system corrupted as a result.
+The `sync' command ensures everything in memory is written to disk.
+
+   Any arguments are ignored, except for a lone `--help' or `--version'
+(*note Common options::).
+
+   An exit status of zero indicates success, and a nonzero value
+indicates failure.
+
+#+END_SRC
