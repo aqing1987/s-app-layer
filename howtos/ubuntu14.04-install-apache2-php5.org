@@ -1,0 +1,22 @@
+#+TITLE: web design
+
+ref:
+https://www.linode.com/docs/websites/apache/apache-2-web-server-on-ubuntu-10-04-lts-lucid/
+
+* os
+ubuntu server 14.04 LTS
+* install apache2
+#+BEGIN_SRC sh
+$ sudo apt-get install apache2 apache2-doc apache2-utils
+#+END_SRC
+* install support for scripting
+#+BEGIN_SRC sh
+$ sudo apt-get install libapache2-mod-php5 php5 php-pear php5-xcache
+#+END_SRC
+* run php with sqlite3
+#+BEGIN_SRC sh
+$ sudo apt-get install php5-sqlite
+#+END_SRC
+* Configuration files location
++ /etc/apache2/
++ /etc/php5/apache2 
