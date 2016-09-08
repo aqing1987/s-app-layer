@@ -1,0 +1,70 @@
+#+TITLE: Compile Vlc On Ubuntu14.04
+
+* Prepare your environment
+VLC requires a C compiler, development headers and a toolchain. 
+gcc will do but you could also use LLVM or proprietary C99/C++ compilers such as Intel's.
+If you build from the Git repositories, you will also need the GNU build system, a.k.a. 
+the "autotools" (autoconf, automake, libtool and gettext) to setup the Makefiles. Make sure 
+they are up-to-date and usable for your system.
+
+#+BEGIN_SRC sh
+$ sudo apt-get install git libtool build-essential pkg-config autoconf
+#+END_SRC
+
+* Get the source
+If you are using the Git development version, start by bootstrapping the source tree:
+
+#+BEGIN_SRC sh
+$ git clone git://git.videolan.org/vlc.git
+$ cd vlc
+$ ./bootstrap
+
+#+END_SRC
+Bootstrapping will fail if the autotools are missing or out-of-date.
+
+* Get the third-party libraries
+Use your distribution packaging or portage system, in order to get all the 
+needed libs. For example on Debian or Ubuntu:
+#+BEGIN_SRC sh
+$ sudo apt-get build-dep vlc
+#+END_SRC
+
+* Configuration
+#+BEGIN_SRC sh
+$ ./configure --enable-x11 --enable-xvideo --enable-sdl --enable-avcodec --enable-avformat \
+ --enable-swscale --enable-mad --enable-libdvbpsi --enable-a52 --enable-libmpeg2 \
+ --enable-faad --enable-vorbis --enable-ogg --enable-theora --enable-faac --enable-mkv --enable-freetype \
+ --enable-fribidi --enable-speex --enable-flac --enable-live555 --with-live555-tree=/usr/lib/live \
+ --enable-caca --enable-skins --enable-skins2 --enable-alsa --enable-qt4 --enable-ncurses
+#+END_SRC
+
+* Compilation
+Compile VLC:
+#+BEGIN_SRC sh
+$ make
+#+END_SRC
+
+You do not need to install VLC to use it. You can also simply 
+run it from the build directory:
+
+#+BEGIN_SRC 
+$ ./vlc
+#+END_SRC
+
+If you really want to install VLC to the system, run this as root:
+#+BEGIN_SRC 
+$ sudo make install
+#+END_SRC
+
+You can uninstall later with this, but you need to keep the 
+build tree untouched until then:
+#+BEGIN_SRC sh
+$ sudo make uninstall
+#+END_SRC
+
+To remove files created during the compile (optional) type:
+
+#+BEGIN_SRC sh
+$ make clean
+#+END_SRC
+
