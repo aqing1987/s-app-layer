@@ -1,0 +1,87 @@
+#+OPTIONS: ^:nil
+#+TITLE: ubuntu curl upload file to apache2 server
+
+* install
+#+BEGIN_SRC sh
+$ sudo apt-get install apache2
+$ sudo apt-get install php5
+$ sudo apt-get install libapache2-mod-php5
+$ sudo apt-get install php5-gd
+#+END_SRC
+
+* get web info
+#+BEGIN_SRC sh
+$ cat /etc/apache2/sites-enabled/000-default.conf
+#+END_SRC
+
+* set php upload conditions
+** ref
+http://php.net/manual/zh/features.file-upload.common-pitfalls.php
+
+** upload_max_fileszie
+#+BEGIN_SRC sh
+$ sudo nano /etc/php5/apache2/php.ini
+#+END_SRC
+change `upload_max_fileszie = 2M' as
+upload_max_fileszie = 30M
+
+** post_max_size
+#+BEGIN_SRC sh
+$ sudo nano /etc/php5/apache2/php.ini
+#+END_SRC
+change `post_max_size = 8M' as
+post_max_size = 30M
+
+** max_execution_time cfg
+#+BEGIN_SRC sh
+$ sudo nano /etc/php5/apache2/php.ini
+#+END_SRC
+change `max_execution_time = 30' as
+max_execution_time = 300
+
+** restart after cfg
+#+BEGIN_SRC sh
+$ sudo /etc/init.d/apache2 restart
+#+END_SRC
+
+
+* config upload directory
+#+BEGIN_SRC sh
+$ cd /var/www
+$ sudo mkdir uploads
+$ sudo chmod -R a+w uploads
+#+END_SRC
+
+* write sup.php (store in /var/www/html)
+contents as below:
+#+BEGIN_SRC php
+<?php
+$uploaddir = '/var/www/uploads/';
+$uploadfile = $uploaddir . basename($_FILES['xx_upload']['name']);
+
+if (is_uploaded_file($_FILES['xx_upload']['tmp_name'])) {
+    echo "File " . $_FILES['xx_upload']['name'] . " uploaed ok.\n";
+    
+	if (file_exists($uploadfile)) {
+	    echo "file exist.\n";
+	}
+    else {
+        if (move_uploaded_file($_FILES['xx_upload']['tmp_name'], $uploadfile)) {
+	        echo "File process ok.\n";	    
+        }
+    }
+}
+else {
+    echo "Possible file upload attack!\n";
+ 	print_r($_FILES);
+}
+
+?>
+#+END_SRC
+* upload by using curl in shell
+#+BEGIN_SRC sh
+curl -F xx_upload=@/home/user_name/a.mp4 http://server_ip/sup.php
+#+END_SRC
+
+*Attention:* `xx_upload' is used in `sup.php', as the first index
+of `_FILES'
