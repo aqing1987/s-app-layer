@@ -1,0 +1,62 @@
+#+TITLE: How To Make Cscope Database by Shell
+
+* key point - find
+
+#+BEGIN_SRC info
+# expr1 -o expr2
+#   Or; expr2 is not evaluated if expr1 is true.
+
+# expr1 expr2
+#   Two expressions in a row are taken to be joined with an  implied
+#   "and"; expr2 is not evaluated if expr1 is false.
+
+# expr1 -a expr2
+#   Same with expr1 expr2
+
+# -print
+#    True; print the full file name on the standard output, followed
+#    by a newline. If  you  are  piping  the output of find into
+#    another program and there is the faintest possibility  that  the
+#    files  which you are searching for might contain a newline, then
+#    you should seriously consider using the -print0  option  instead
+#    of  -print. 
+
+# -path pattern
+#    To  ignore  a whole directory tree, use -prune rather
+#    than checking every file in the tree.  For example, to skip  the
+#    directory  `src/emacs'  and  all files and directories under it,
+#    and print the names of the other files found, do something  like
+#    this:
+#           find . -path ./src/emacs -prune -o -print
+#    It  would  only  make sense to use an absolute path name here if
+#    the relevant start point is also an absolute path.
+#+END_SRC
+
+* shell code
+
+#+BEGIN_SRC sh
+CSCOPE_NAME=cscope.files
+
+find . \
+	 -path "./.git" -prune -o \
+	 -path "./target" -prune -o \
+	 -path "./tftp" -prune -o \
+	 -name "*.[ch]" -o \
+	 -name "*.cpp" -o \
+	 -name "*.hh" -o \
+	 -name "*.[sS]" -o \
+	 -name "Makefile" -o \
+	 -name "*.[mM][kK]" -o \
+	 -name "*.make" -o \
+	 -name "[Cc]onfigure" -o \
+	 -name "*.conf" -o \
+	 -name "*.config" -o \
+	 -name "*.cfg" -o \
+	 -name "*.sh" -o \
+	 -name "*.py" \
+	  > "$CSCOPE_NAME"
+
+if [ -f "$CSCOPE_NAME" ]; then
+	cscope -Rbk -i "$CSCOPE_NAME"
+fi
+#+END_SRC
