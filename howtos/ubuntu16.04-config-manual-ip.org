@@ -1,0 +1,9 @@
+#+title: ubuntu 16.04 config manual ip
+
++ connect network by using dhcp first
++ check detailed ip info by using:
+#+BEGIN_SRC sh
+nmcli dev show
+#+END_SRC
+
++ config manual ip info
