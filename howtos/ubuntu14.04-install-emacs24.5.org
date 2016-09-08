@@ -1,0 +1,50 @@
+#+title: ubuntu14.04 install emacs24.5
+* get the src
+  :PROPERTIES:
+  :CUSTOM_ID: get the src
+  :END:      
+1) Use git clone
+#+begin_src sh
+$ git clone https://github.com/emacs-mirror/emacs.git
+#+end_src
+
+or 
+
+2) download from
+https://www.gnu.org/software/emacs/
+
+* libs prepare
+  :PROPERTIES:
+  :CUSTOM_ID: libs prepare
+  :END:
+#+begin_src sh
+emacs-24.5$ sudo apt-get install libgtk2.0-dev
+emacs-24.5$ sudo apt-get install libxpm-dev
+emacs-24.5$ sudo apt-get install libjpeg8-dev
+emacs-24.5$ sudo apt-get install libgif-dev
+emacs-24.5$ sudo apt-get install libtiff5-dev
+emacs-24.5$ sudo apt-get install libncurses5-dev
+#+end_src
+
+* install emacs-24.5
+  :PROPERTIES:
+  :CUSTOM_ID: install emacs-24.5
+  :END:
+#+begin_src sh
+emacs-24.5$ ./configure
+emacs-24.5$ make
+emacs-24.5$ sudo make install
+#+end_src
+
+* start
+  :PROPERTIES:
+  :CUSTOM_ID: start
+  :END:
+** start with window
+#+begin_src sh
+$ emacs
+#+end_src
+** start without window
+#+begin_src sh
+$ emacs -nw
+#+end_src
