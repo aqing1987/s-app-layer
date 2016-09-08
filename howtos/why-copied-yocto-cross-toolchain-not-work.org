@@ -1,0 +1,39 @@
+#+TITLE: Why Copied Yocto Cross Toolchain Not Work
+
+* problem description
+When I copied yocto cross toolchain from colleague, and test it as below:
+#+BEGIN_SRC sh
+$ cd i686-pokysdk-linux/usr/bin/arm-poky-linux-gnueabi$ 
+$ ./arm-poky-linux-gnueabi-gcc
+bash: ./arm-poky-linux-gnueabi-gcc: No such file or directory
+#+END_SRC
+
+* analysis
+** install source check
+My colleague installed the toolchain by using his generated SDK shell.
+#+BEGIN_SRC info
+poky-glibc-i686-fsl-image-gui-cortexa7hf-vfp-neon-toolchain-1.8.sh
+#+END_SRC
+
+** cross tool header check
+#+BEGIN_SRC sh
+$ head -1 ./arm-poky-linux-gnueabi-gcc
+ELF��4H�
+ 4 	(44�4�  TT�T���ܝ
+                     ܝ
+                            �
+                             lz��
+                                    �)�)��TT�T�DD�
+P�td�	l"l"Q�td/opt/poky/self-yocto-sdk-1.8/sysroots/i686-pokysdk-linux/lib/ld-linux.so.2GNU GNUr�3"��0D7
+                                                b?Ѷ���2&��P!��@
+              ������ QgJĹ�@�4���Bm���ݣk���|gUaS'�p����K���{ƥF��ŉ�"d
+   ��}\
+ ]�s�n��[��z5"&/����Bs�I�i��h�H}PX' ]p�������u������Oa�{C# ���������-�b���!�:�AU9���2����I�6 ��u���+J ��P��z-O�U���Bd3�H3�@3
+
+#+END_SRC
+
+We can see *the cross tool's header contains my colleague's cross tool path info*, which not 
+exist on my machine!!!
+
+* solution
+install it by using the SDK shell.
