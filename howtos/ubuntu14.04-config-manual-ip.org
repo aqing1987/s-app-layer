@@ -1,0 +1,15 @@
+#+title: ubuntu 14.04 config manual ip
+
++ connect network by using dhcp first
++ nm-tool check detailed ip info
+#+begin_src code
+IPv4 Settings:
+    Address:         192.168.15.29
+    Prefix:          26 (255.255.255.192)
+    Gateway:         192.168.15.62
+
+    DNS:             192.168.1.7
+    DNS:             192.168.1.8
+#+end_src
+
++ config manual ip info
