@@ -1,0 +1,24 @@
+#+title: A start job is running for raise network interfaces
+
+* description
+ubuntu16.04 server starts without ethernet cable and the following msg show:
+#+BEGIN_SRC info
+A start job is running for raise network interfaces (5 mins 1 sec)
+#+END_SRC
+
+* solution
+Change the line in /etc/network/interfaces that reads, 
+"auto {Your ethernet adapter's name here}" to 
+"allow-hotplug {Your ethernet adapter's name here}". 
+
+change:
+#+BEGIN_SRC sh
+auto ens34
+iface ens34 inet dhcp
+#+END_SRC
+
+to:
+#+BEGIN_SRC sh
+allow-hotplug ens34
+iface ens34 inet dhcp
+#+END_SRC
