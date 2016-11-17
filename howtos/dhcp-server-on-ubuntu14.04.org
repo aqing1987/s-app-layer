@@ -1,0 +1,73 @@
+#+title: set up dhcp server on ubuntu14.04
+
+* refs
+http://www.krizna.com/ubuntu/setup-dhcp-server-ubuntu-14-04/
+https://help.ubuntu.com/community/isc-dhcp-server
+
+* introduce
+DHCP server is used to assign IP address to client computers and other Network
+devices . Basically we need Ipaddress, Subnet mask, Gateway and DNS for network
+settings . We need to define these values in the DHCP server, so that the 
+client computer connected to that network gets values automatically from DHCP
+server.
+
+* install
+#+BEGIN_SRC sh
+sudo apt-get update
+sudo apt-get install isc-dhcp-server -y
+#+END_SRC
+
+* configuration
+** set interface
+open /etc/default/isc-dhcp-server file and assign interface.
+#+BEGIN_SRC sh
+$ sudo nano /etc/default/isc-dhcp-server
+INTERFACES="eth0"
+#+END_SRC
+
+** set dhcpd
+We need to define below values in dhcpd.conf file located in /etc/dhcp/
+directory.
+
+example scenario:
+network: 10.100.1.0/24
+range: 10.100.1.10 (Starting IP) - 10.100.1.100 (Ending IP)
+
+#+BEGIN_SRC sh
+$ sudo cp /etc/dhcp/dhcpd.conf /etc/dhcp/dhcpd.conf.org
+$ sudo nano /etc/dhcp/dhcpd.conf
+#+END_SRC
+
+add the below code after making changes as per your network values
+#+BEGIN_SRC info
+subnet 10.100.1.0 netmask 255.255.255.0 {
+  range 10.100.1.10 10.100.1.100;
+  option broadcast-address 10.100.1.255; #broadcast
+  default-lease-time 600;
+  max-lease-time 7200;
+}
+
+#+END_SRC
+
+Now start/restart dhcp service using the below command.
+#+BEGIN_SRC sh
+sudo service isc-dhcp-server restart
+#+END_SRC
+* err-fix
+** stop: Unknown instance
+*** desc
+#+BEGIN_SRC info
+lpc@lpc:~$ sudo service isc-dhcp-server restart
+stop: Unknown instance: 
+start: Job failed to start
+#+END_SRC
+
+*** solution
+check /var/log/syslog
+#+BEGIN_SRC sh
+Nov 14 17:02:42 lpc dhcpd: subnet 10.10.1.0 netmask 255.255.0.0
+Nov 14 17:02:42 lpc dhcpd:                                    ^
+Nov 14 17:02:42 lpc dhcpd: Configuration file errors encountered -- exiting
+#+END_SRC
+
+change dhcpd.conf netmask as 255.255.255.0
