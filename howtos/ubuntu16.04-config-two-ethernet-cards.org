@@ -1,0 +1,52 @@
+#+title: ubuntu 16.04 config two ethernet cards
+
+* show all net interfaces
+#+BEGIN_SRC sh
+➜  ~ ifconfig -a
+enp3s0    Link encap:Ethernet  HWaddr 2c:53:4a:01:07:39  
+          UP BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:9548 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:415 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:7644842 (7.6 MB)  TX bytes:45116 (45.1 KB)
+
+eth0      Link encap:Ethernet  HWaddr f4:8e:38:84:b9:69  
+          inet addr:172.16.1.26  Bcast:172.16.255.255  Mask:255.255.0.0
+          inet6 addr: fe80::f68e:38ff:fe84:b969/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:4566 errors:0 dropped:8 overruns:0 frame:0
+          TX packets:261 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:2698624 (2.6 MB)  TX bytes:27774 (27.7 KB)
+
+#+END_SRC
+* auto get ipaddr 
+#+BEGIN_SRC sh
+sudo dhclient -i enp3s0
+
+ifconfig -a
+enp3s0    Link encap:Ethernet  HWaddr 2c:53:4a:01:07:39  
+          inet addr:192.168.20.7  Bcast:192.168.20.255  Mask:255.255.255.0
+          inet6 addr: fe80::2e53:4aff:fe01:739/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:9707 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:471 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:7769696 (7.7 MB)  TX bytes:51184 (51.1 KB)
+
+eth0      Link encap:Ethernet  HWaddr f4:8e:38:84:b9:69  
+          inet addr:172.16.1.26  Bcast:172.16.255.255  Mask:255.255.0.0
+          inet6 addr: fe80::f68e:38ff:fe84:b969/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:5189 errors:0 dropped:8 overruns:0 frame:0
+          TX packets:353 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:3122122 (3.1 MB)  TX bytes:35508 (35.5 KB)
+
+#+END_SRC
+* add gateway for subnet in route table
+#+BEGIN_SRC sh
+sudo route add -net 192.168.11.0/24 gw 172.16.0.254
+
+route -n
+#+END_SRC
