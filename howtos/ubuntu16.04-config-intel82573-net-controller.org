@@ -1,0 +1,32 @@
+#+title: ubuntu16.04 config interl82573 net controller
+
+* reference
+http://blog.csdn.net/zhuyu4839/article/details/42875939
+
+* download driver
+download from:
+https://downloadcenter.intel.com/zh-cn/download/15817/PCI-Intel-Linux-E-
+
+* compile
+kernel 4.4.0 is supported
+
+#+BEGIN_SRC sh
+uname -a
+4.4.0-31-generic #50-Ubuntu SMP Wed Jul 13 00:07:12 UTC 2016 x86_64 x86_64 x86_64 GNU/Linux
+
+tar xf e1000e-3.3.4.tar.gz
+cd e1000e-3.3.4/src/
+sudo make install
+#+END_SRC
+
+* disable uefi secure boot
+disable uefi secure boot in bios
+
+* install
+after disable uefi secure boot, do the following commands:
+#+BEGIN_SRC sh
+sudo rmmod e1000e
+sudo modprobe e1000e
+#+END_SRC
+
+then each time system reboot, the e1000e module will be probed automatically.
