@@ -1,0 +1,16 @@
+#+title: check file's partition
+#+options: ^:nil
+
+* comand
+#+BEGIN_SRC sh
+df -h filename
+#+END_SRC
+* example
+#+BEGIN_SRC sh
+@(none):/overlay/etc# df -h shadow                                                   
+Filesystem                Size      Used Available Use% Mounted on
+/dev/ubi1_0             136.5M    104.0K    131.7M   0% /overlay
+@(none):/overlay/etc# df -h /rom/etc/shadow                                          
+Filesystem                Size      Used Available Use% Mounted on
+mtd:ubi_rootfs           14.8M     14.8M         0 100% /rom
+#+END_SRC
