@@ -1,0 +1,96 @@
+#+title: buildbot config
+#+options: ^:nil
+
+* refs
+http://askubuntu.com/questions/817917/ubuntu-16-04-lts-buildbot-how-to-fix-dependencies-problem
+http://docs.buildbot.net/current/tutorial/firstrun.html
+http://docs.buildbot.net/current/tutorial/tour.html#quick-tour-label
+
+* install
+#+BEGIN_SRC sh
+sudo apt install virtualenv
+cd
+mkdir -p tmp/buildbot
+cd tmp/buildbot
+virtualenv --no-site-packages sandbox
+source sandbox/bin/activate
+pip install buildbot
+pip install buildbot-slave
+#+END_SRC
+
+* create a master
+#+BEGIN_SRC sh
+buildbot create-master master
+mv master/master.cfg.sample master/master.cfg
+buildbot start master
+#+END_SRC
+
+check the master's log if needed:
+#+BEGIN_SRC sh
+tail -f master/twistd.log
+#+END_SRC
+
+* create a slave
+#+BEGIN_SRC sy
+buildslave create-slave slave localhost:9989 example-slave pass
+buildslave start slave
+#+END_SRC
+
+check the slave's log if needed:
+#+BEGIN_SRC sh
+tail -f slave/twistd.log
+#+END_SRC
+
+* check the web
+You should now be able to go to http://localhost:8010 now!
+
+* build config
+** set project name and url
+#+BEGIN_SRC sh
+cd
+cd tmp/buildbot
+source sandbox/bin/activate
+vi master/master.cfg
+#+END_SRC
+
+Now, look for the section marked PROJECT IDENTITY which reads:
+
+#+BEGIN_SRC content
+####### PROJECT IDENTITY
+
+# the 'title' string will appear at the top of this buildbot
+# installation's html.WebStatus home page (linked to the
+# 'titleURL') and is embedded in the title of the waterfall HTML page.
+
+c['title'] = "Pyflakes"
+c['titleURL'] = "http://divmod.org/trac/wiki/DivmodPyflakes"
+#+END_SRC
+
+sample
+#+BEGIN_SRC content
+c['title'] = "orange"
+c['titleURL'] = "http://192.168.66.251/hp/orange.git"
+#+END_SRC
+
+** change sources
+sample as below:
+#+BEGIN_SRC content
+c['change_source'] = []
+c['change_source'].append(changes.GitPoller(
+        'git@192.168.66.251:hp/orange.git',
+        workdir='gitpoller-workdir', branch='master',
+        pollinterval=300))
+#+END_SRC
+** change builders
+sample as below:
+#+BEGIN_SRC content
+# check out the source
+factory.addStep(steps.Git(repourl='git@192.168.66.251:hp/orange.git', mode='incremental'))
+# run the tests (note that this will require that 'trial' is installed)
+factory.addStep(steps.ShellCommand(command=["make", "-j 8"]))
+#+END_SRC
+** make it work
+After making a change go into the terminal and type:
+#+BEGIN_SRC sh
+buildbot reconfig master
+#+END_SRC
