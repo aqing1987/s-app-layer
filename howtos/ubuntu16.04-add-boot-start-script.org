@@ -1,0 +1,8 @@
+#+title: ubuntu16.04 add boot start script
+
+* steps
++ write start script xx.sh
++ put xx.sh to /root
++ chmod +x /root/xx.sh
++ change /etc/rc.local
+  put `sh /root/xx.sh' before `exit 0'
