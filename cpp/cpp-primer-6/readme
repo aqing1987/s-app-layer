@@ -1,0 +1,12 @@
+OOP is a programming style that you can use to some degree with any language.
+
+Certainly, you can incorporate many OOP ideas into ordinary C programs.
+
+For example, separate-compilation
+in which a header file contains a structure prototype along with the prototypes
+for functions to manipulate that structure. The main() function simplly defines
+variables of that structure type and uses the associated functions to handle
+those variables; main() does not directly access structure members. In essence,
+that example defines an abstract type that places the storage format and the
+function prototypes in a header file, hiding the actual data representation
+from main().
