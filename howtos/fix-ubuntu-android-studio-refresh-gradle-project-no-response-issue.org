@@ -1,0 +1,55 @@
+#+title: fix ubuntu android studio refresh gradle project no response issue
+#+options: ^:nil
+
+* description
+os: ubuntu 16.04 64bit
+android studio: 2.3
+
+long time without response after open android studio, the 
+`refresh gradle project' process runs for a long time without resonse.
+
+* solution
+** kill android studio by using xkill
+** check what gradle version needed
+cd into your android studio project.
+#+BEGIN_SRC sh
+➜  Sble ls
+app    build.gradle  gradle.properties  gradlew.bat       Sble.iml
+build  gradle        gradlew            local.properties  settings.gradle
+
+➜  Sble cat gradle/wrapper/gradle-wrapper.properties 
+\#Mon Mar 06 16:45:10 CST 2017
+distributionBase=GRADLE_USER_HOME
+distributionPath=wrapper/dists
+zipStoreBase=GRADLE_USER_HOME
+zipStorePath=wrapper/dists
+distributionUrl=https\://services.gradle.org/distributions/gradle-3.3-all.zip
+#+END_SRC
+
+then we know, gradle-3.3-all.zip is needed.
+
+** download the gradle manually
+you can download the gradle-3.3-all.zip from http://services.gradle.org/distributions
+
+** put gradle to local directoy
+#+BEGIN_SRC sh
+➜  ~ cd .gradle/wrapper/dists 
+➜  dists ls
+gradle-2.14.1-all  gradle-3.3-all
+
+➜  dists cd gradle-3.3-all/55gk2rcmfc6p2dg9u9ohc3hw9 
+➜  55gk2rcmfc6p2dg9u9ohc3hw9 ls
+gradle-3.3-all.zip.lck  gradle-3.3-all.zip.part
+#+END_SRC
+
+we should put the gradle-3.3-all.zip file to directory `55gk2rcmfc6p2dg9u9ohc3hw9'
+
+unzip it, and change flag file `gradle-3.3-all.zip.part' to be
+`gradle-3.3-all.zip.ok'
+
+it should looks like as below:
+#+BEGIN_SRC sh
+➜  55gk2rcmfc6p2dg9u9ohc3hw9 ls
+gradle-3.3  gradle-3.3-all.zip  gradle-3.3-all.zip.lck  gradle-3.3-all.zip.ok
+#+END_SRC
+** start android studio again
