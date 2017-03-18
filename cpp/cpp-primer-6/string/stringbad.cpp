@@ -3,6 +3,16 @@
 // Whenever you use new in a constructor to allocate memory, you should use delete
 // in the corresponding destructor to free that memory. If you use new[] (with brackets),
 // then you should use delete[] (with brackets).
+// c++ automatically provides the following member function:
+// 1. A default constructor if you define no constructors
+// 2. A default destructor if you don't define one
+// 3. A copy constructor if you don't define one
+// 4. An assignment operator if you don't define one
+// 5. An address operator if you don't define one
+// For example, if you assign one object to another, the program provides
+// a definition for the assignment operator.
+// It turns out that the implicit copy constructor and the imlicit assignment
+// operator cause the StringBad class problems.
 #include <cstring> // string.h for some
 
 #include "stringbad.h"
