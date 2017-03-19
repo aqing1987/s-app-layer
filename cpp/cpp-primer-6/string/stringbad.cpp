@@ -13,6 +13,12 @@
 // a definition for the assignment operator.
 // It turns out that the implicit copy constructor and the imlicit assignment
 // operator cause the StringBad class problems.
+//
+// Caution:
+// If a class contains members that are pointers initialized by new, you should
+// define a copy constructor that copies the pointed-to data instead of copying
+// the pointers themselves. This is termed deep copying. The alternative form
+// of copying(memberwise, or shallow, copying) just copies pointer values.
 #include <cstring> // string.h for some
 
 #include "stringbad.h"
@@ -42,6 +48,24 @@ StringBad::StringBad(const char * s) {
   str = new char[len + 1]; // allocate storage
   std::strcpy(str, s); // initialize pointer
   num_strings++; // set object count
+  cout << num_strings << ": \"" << str
+       << "\" object created. \n"; // for your information
+}
+
+// copy constructor
+// make a deep copy
+// That is, rather than just copy the address of the string, the copy
+// constructor should duplicate the string and assign the address of the
+// duplicate to the str memeber. That way, each object gets its own
+// string rather than referring to another object's string. And each call
+// of the destructor frees a different string rather than making duplicate
+// attempts at freeing the same string.
+StringBad::StringBad(const StringBad & st) {
+  num_strings++; // handle static
+  len = st.len; // same length
+  str = new char[len + 1]; // allot space
+  std::strcpy(str, st.str); // copy string to new location
+
   cout << num_strings << ": \"" << str
        << "\" object created. \n"; // for your information
 }

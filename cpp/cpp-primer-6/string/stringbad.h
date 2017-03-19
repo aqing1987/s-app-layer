@@ -27,6 +27,7 @@ class StringBad {
 
  public:
   StringBad(const char * s); // constructor
+  StringBad(const StringBad & st); // copy constructor
   StringBad(); // default constructor
   ~StringBad(); // destructor
 
