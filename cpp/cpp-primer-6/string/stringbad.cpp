@@ -92,6 +92,29 @@ StringBad::~StringBad() {
   delete [] str; // required
 }
 
+// the solution for the problems created by an inappropirate default
+// assignment operator is to provide your own assignment operator definition,
+// one that makes a deep copy.
+// Assignment does not create a new object, so you don't have to adjust the
+// value of the static data member num_strings.
+StringBad & StringBad::operator=(const StringBad & st) {
+  // checks for self-assignment
+  if (this == &st) { // object assigned to itself
+    return *this; // all done
+  }
+
+  // free old string
+  // the reason for this is that shortly thereafter str will be assigned
+  // the address of a new string. If you don't first apply the delete
+  // operator, the previous string will remain in memory.
+  delete [] str;
+  len = st.len;
+  str = new char [len + 1]; // get space for new string
+  std::strcpy(str, st.str); // copy the string
+
+  return *this; // return reference to invoking object
+}
+
 std::ostream & operator<<(std::ostream & os, const StringBad & st) {
   os << st.str;
   return os;

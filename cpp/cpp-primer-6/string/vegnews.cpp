@@ -44,6 +44,9 @@ int main(int argc, char *argv[])
 
     cout << "Assign one object to another:\n";
     StringBad knot;
+    // assignment operator invoked
+    // like a copy constructor, an implicit implementation of an assignment
+    // operator performs a member-to-member copy.
     knot = headline1;
     cout << "knot: " << knot << endl;
 

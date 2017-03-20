@@ -30,6 +30,7 @@ class StringBad {
   StringBad(const StringBad & st); // copy constructor
   StringBad(); // default constructor
   ~StringBad(); // destructor
+  StringBad & operator=(const StringBad &); // overload assignment operator
 
   // friend function
   friend std::ostream & operator<<(std::ostream & os, const StringBad & st);
