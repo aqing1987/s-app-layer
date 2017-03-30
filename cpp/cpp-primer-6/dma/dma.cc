@@ -1,8 +1,9 @@
 // dma.cc -- dma class methods
+// Copyright 2017 Kevin All rights reserved.
+
+#include "./dma.h"
 
 #include <cstring>
-
-#include "dma.h"
 
 // baseDMA methods =============================================================
 
@@ -41,7 +42,7 @@ std::ostream& operator<<(std::ostream& os, const baseDMA& rs) {
   return os;
 }
 
-// lacksDMA methods =============================================================
+// lacksDMA methods ============================================================
 
 lacksDMA::lacksDMA(const char* c, const char* l, int r)
     : baseDMA(l, r) {
@@ -56,7 +57,7 @@ std::ostream& operator<<(std::ostream& os, const lacksDMA& ls) {
   return os;
 }
 
-// hasDMA methods ===============================================================
+// hasDMA methods ==============================================================
 
 hasDMA::hasDMA(const char* s, const char* l, int r)
     : baseDMA(l, r) {
@@ -85,9 +86,9 @@ hasDMA& hasDMA::operator=(const hasDMA& hs) {
   if (this == &hs)
     return *this;
 
-  baseDMA::operator=(hs); // copy base portion
+  baseDMA::operator=(hs);  // copy base portion
 
-  delete [] style_; // prepare for new style_
+  delete [] style_;  // prepare for new style_
   style_ = new char[std::strlen(hs.style_) + 1];
   std::strcpy(style_, hs.style_);
 

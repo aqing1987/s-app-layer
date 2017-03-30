@@ -1,9 +1,10 @@
 // usedma.cc -- inheritance, friends, and DMA
+// Copyright 2017 Kevin All rights reserved.
 // compile with dma.cc
 
 #include <iostream>
 
-#include "dma.h"
+#include "./dma.h"
 
 int main(int argc, char *argv[]) {
   using std::cout;
