@@ -51,7 +51,7 @@ lacksDMA::lacksDMA(const char* c, const char* l, int r)
 }
 
 std::ostream& operator<<(std::ostream& os, const lacksDMA& ls) {
-  os << (const baseDMA&) ls;
+  os << dynamic_cast<const baseDMA&>(ls);
   os << "Color: " << ls.color_ << std::endl;
 
   return os;
@@ -97,7 +97,7 @@ hasDMA& hasDMA::operator=(const hasDMA& hs) {
 
 std::ostream& operator<<(std::ostream& os, const hasDMA& hs) {
   // use a type cast to match operator<<(ostream&, const baseDMA&)
-  os << (const baseDMA&) hs;
+  os << dynamic_cast<const baseDMA&>(hs);
   os << "Style: " << hs.style_ << std::endl;
 
   return os;
