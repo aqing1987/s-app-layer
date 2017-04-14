@@ -1,0 +1,62 @@
+#+title: openwrt gdb usage
+#+options: ^:nil
+
+* refs
+https://wiki.openwrt.org/doc/devel/gdb
+http://www.0xf8.org/2009/08/openwrt-remote-debugging/
+
+* prepare
+** compiling tools
+in menuconfig enable gdb
+#+BEGIN_SRC menu
+Advanced configuration options (for developers) -> Toolchain Options
+-> Build gdb
+#+END_SRC
+
+and gdbserver
+#+BEGIN_SRC menu
+Development -> gdbserver
+#+END_SRC
+
+** open debug option in package
+Add CFLAGS to the package Makefile and recompile it.
+#+BEGIN_SRC make
+TARGET_CFLAGS += -ggdb3
+#+END_SRC
+
+add
+#+BEGIN_SRC make
+CFLAGS+=-g
+#+END_SRC
+
+in package src/Makefile
+
+* start gdbserver on target
+the target ip is 192.168.1.20
+#+BEGIN_SRC sh
+# gdbserver :9000 /bin/hello
+#+END_SRC
+
+* start gdb on host
+** openwrt quick
+#+BEGIN_SRC sh
+./scripts/remote-gdb 192.168.1.20:9000 ./build_dir/target-*/hello/hello
+#+END_SRC
+
+** common method
+#+BEGIN_SRC sh
+$ arm-xx-gdb
+(gdb) file <openwrtdir>/build_dir/<targetarch>/<path>/<executable>
+(gdb) target remote ip:9000
+#+END_SRC
+* quit gdb
+** 1. monitor exit
+Give command
+#+BEGIN_SRC sh
+monitor exit
+#+END_SRC
+from your **host gdb** before terminating the client. If you have already
+terminated it, just attach with another one.
+** 2. kill
+Terminating it is target dependent. For example, if your target is UNIX-ish,
+you could remote login and use ps and kill from a target shell.
