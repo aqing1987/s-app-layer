@@ -1,0 +1,62 @@
+<!--
+     "index.html" and "default.htm" are examples of default pages. If you
+     specify a directory without a filename, the web server will look for a
+     default page to return to the browser.
+     You can use relative paths or URLs in your <a> element's href attribute
+     to link to other web pages. For other pages in your site, it's best to
+     use relative paths, and use URLs for external links.
+     Use the id attribute to create a destination in a page. Use # followed by
+     a destination id to link to that location in a page.
+     To help accessibility, use the title attribute to provide a description
+     of the link in <a> elements.
+     Use the target attribute to open a link in another browser window.
+   -->
+<html>
+  <head>
+    <title>Starbuzz Coffee</title>
+    <style type="text/css">
+      body {
+        background-color: #d2b48c;
+        margin-left: 20%;
+        margin-right: 20%;
+        border: 2px dotted black;
+        padding: 10px 10px 10px 10px;
+        font-family: sans-serif;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Starbuzz Coffee Beverages</h1>
+    <h2>House Blend, $1.49</h2>
+    <p>A smooth, mild blend of coffees from Mexico,
+          Bolivia and Guatemala.</p>
+
+    <h2>Mocha Cafe Latte, $2.35</h2>
+    <p>Espresso, steamed milk and chocolate syrup.</p>
+
+    <h2>Cappuccino, $1.89</h2>
+    <p>A mixture of espresso, steamed milk and foam.</p>
+
+    <!-- id should be unique. by giving it an id, you've made a
+       destination out of the Chai Tea heading in the page. -->
+    <h2 id="chai">Chai Tea, $1.85</h2>
+    <p>A spicy drink made with black tea, spices,
+           milk and honey.</p>
+    <p>
+      <!--
+           relative paths can only be used to link to pages within the same
+           website, while URLs are typically used to link to other websites.
+         -->
+      <a href="mission.html"
+         title="our Mission">Read about our Mission</a>
+      <br>
+      <!-- if the target is "_blank", then the browser opens tha link in a
+         new window. -->
+      <!-- add # along with the destination id to your href -->
+      Read the <a target="_blank"
+                  href="http://wickedlysmart.com/buzz/index.html#Coffee"
+                  title="Read all about caffeine on the Buzz">Caffeine Buzz</a>
+    </p>
+  </body>
+</html>
