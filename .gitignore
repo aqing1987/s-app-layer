@@ -5,3 +5,6 @@ cscope*
 *Debug
 *Release
 *.pro.user
+
+# java ignore
+*.class
