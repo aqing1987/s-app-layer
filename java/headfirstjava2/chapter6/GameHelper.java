@@ -33,8 +33,9 @@ public class GameHelper {
     int location = 0;  // current start location
 
     comCount++;  // nth dot com to place
+    System.out.println("comCount = " + comCount);
     int incr = 1;  // set horizontal increment
-    if ((comCount % 2) == 1) {  // if odd dot com (place vertically)
+    if ((comCount % 2) == 0) {  // if even dot com (place vertically)
       incr = gridLength;  // set vertical increment
     }
 
@@ -45,6 +46,7 @@ public class GameHelper {
       success = true;  // assume success
       while (success && x < comSize) {  // lokk for adjacent unused spots
         if (grid[location] == 0) {  // if not used
+          System.out.println("location = " + location + " incr = " + incr);
           coords[x++] = location;  // save location
           location += incr;  // try 'next' adjacent
           if (location >= gridSize) {  // out of bounds - 'bottom
@@ -71,9 +73,9 @@ public class GameHelper {
       grid[coords[x]] = 1;  // mark as 'used'
       row = (int) (coords[x] / gridLength);  // get row value
       column = coords[x] % gridLength;  // get numeric column value
-      temp = String.valueOf(alphabet.charAt(column));  // convert to alpha
+      temp = String.valueOf(alphabet.charAt(row));  // convert to alpha
 
-      alphaCells.add(temp.concat(Integer.toString(row)));
+      alphaCells.add(temp.concat(Integer.toString(column)));
       x++;
 
       // tell where the DotCom is located
