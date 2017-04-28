@@ -1,0 +1,30 @@
+@font-face {
+    font-family: "Emblema One";
+    src: url("./EmblemaOne-Regular.woff"), url("./EmblemaOne-Regular.ttf");
+}
+
+body {
+    font-family: Verdana, Geneva, Arial, sans-serif;
+    font-size: medium;
+}
+
+h1, h2 {
+    color: #cc6600;
+    /* text-decoration: underline;*/
+    border-bottom: thin dotted #888888;
+}
+
+h1 {
+    font-family: "Emblema One", sans-serif;
+    font-size: 180%;
+}
+
+h2 {
+    font-size: 1.2em;
+    font-weight: normal;
+}
+
+blockquote {
+    font-style: italic;
+}
+
