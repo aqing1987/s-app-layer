@@ -7,10 +7,19 @@ import sys
 class Md5Crack:
 
   def __init__(self, crack_str):
-    self.chars="ABCDEFGHIJKLMNOPQRSTUVWXYZ"\
+    # complicated chars
+    self.charscpx="ABCDEFGHIJKLMNOPQRSTUVWXYZ"\
       "abcdefghijklmnopqrstuvwxyz"\
       "1234567890"\
       " ."
+
+    self.charslist = [
+      "0123456789", # all digital numbers
+      "abcdefghijklmnopqrstuvwxyz", # all lower case
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZ"\
+      "abcdefghijklmnopqrstuvwxyz"\
+      "1234567890",
+    ]
     self.crack_str = crack_str
     self.cdict = {
       'c1':'', 'c2':'', 'c3':'', 'c4':'',
@@ -48,7 +57,8 @@ class Md5Crack:
     else:
       sc = 'c' + str(digits)
       digits -= 1
-      for c in self.chars:
+      #for c in self.chars:
+      for c in self.charslist[1]:
         self.cdict[sc] = c
         self.plain_code_guess(digits)
 
