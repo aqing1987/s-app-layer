@@ -1,0 +1,56 @@
+#+title: fix buildbot multi-core compile not work issue
+#+options: ^:nil
+
+* description
+I use buildbot for daily build task. But the multi-core compile feature
+is not effective.
+
+* analysis
+
+** multi-core compile in terminal test
+We use a build script to accept multi-core compile parameter. as below:
+
+#+BEGIN_SRC sh
+./build-sh -j 16
+#+END_SRC
+
+add we add debug info in `build-sh'
+#+BEGIN_SRC sh
+if [ $num -gt 1 ]; then
+    echo "*** $num cpu core compiling ***"
+    make -j$num V=s
+else
+    make V=s
+fi
+#+END_SRC
+
+It proves that multi-core compile in terminal works.
+
+** multi-core compile in buildbot test
+and we write the buildbot master.cfg as below:
+#+BEGIN_SRC python
+makeall = steps.ShellCommand(
+    name = "make-all",
+    command = ["./build-sh", "-j 16"],
+    haltOnFailure = True,
+    description = "make all" )
+#+END_SRC
+
+By analyzing the buildbot stdio log file, we found that the multi-core
+compile feature is not in use.
+
+* fix
+
+Don't specify the command with a list of argv strings, specify it with
+a single string.
+
+modified as below:
+#+BEGIN_SRC python
+makeall = steps.ShellCommand(
+    name = "make-all",
+    command = "./build-sh -j 16",
+    haltOnFailure = True,
+    description = "make all" )
+#+END_SRC
+
+Then the multi-core compile feature can be effective.
