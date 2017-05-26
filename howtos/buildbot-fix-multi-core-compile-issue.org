@@ -53,4 +53,10 @@ makeall = steps.ShellCommand(
     description = "make all" )
 #+END_SRC
 
+and do
+#+BEGIN_SRC sh
+$ cd buildbot
+$ buildbot reconfig master/
+#+END_SRC
+
 Then the multi-core compile feature can be effective.
