@@ -1,0 +1,69 @@
+#+title: ubuntu16.04 install emacs25.2
+#+options: ^:nil
+
+* Changes in emacs25.2
+This is mainly a bug-fix release, but there are some other changes.
+
++ 'find-library', 'help-function-def' and 'help-variable-def' now run
+  'find-function-after-hook'.
+
++ New basic face 'fixed-pitch-serif', for a fixed-width font with serifs.
+  The 'Info-quoted' and 'tex-verbatim' faces inherit from it by default.
+
++ New variable 'use-default-font-for-symbols', for backward compatibility.
+  This variable allows you to get back pre-Emacs 25 behavior where the
+  font for displaying symbol and punctuation characters was always
+  selected according to your fontset setup.  By default, Emacs 25 tries
+  to use the default face's font for such characters, if it supports
+  them, disregarding the fontsets.  Set this variable to nil to disable
+  this and get back the old behavior.
+
++ 'electric-quote-mode' is no longer suppressed in a buffer whose
+  coding system cannot represent curved quote characters.
+  Instead, users can deal with the unrepresentable characters in the
+  usual way when they save the buffer.
+
++ New variable 'inhibit-compacting-font-caches'.
+  Set this variable to a non-nil value to speed up display of characters
+  using large fonts, at the price of a larger memory footprint.
+
++ The version number of CC Mode has been changed from 5.33 to
+  5.32.99, although the software itself hasn't changed.  This aims to
+  reduce confusion with the standalone CC Mode 5.33 (available from
+  http://cc-mode.sourceforge.net), which is a more mature version than
+  the one included in Emacs 25.2.
+* get the src
+download the stable package emacs-25.2.tar.xz from
+https://www.gnu.org/software/emacs/
+
+* remove old emacs
+Remove previous Emacs if any before getting started, I used emacs-24.5
+before, so it's needed to be removed:
+#+BEGIN_SRC sh
+$ cd software/emacs-24.5
+$ sudo make uninstall
+#+END_SRC
+* install dependencies
+emacs24 and 25 use the same build dependencies:
+#+BEGIN_SRC sh
+$ sudo apt install build-essential checkinstall
+$ sudo apt-get build-dep emacs24
+#+END_SRC
+
+* install emacs-25.2
+#+begin_src sh
+$ tar xf emacs-25.2.tar.xz
+emacs-25.2$ ./configure
+emacs-25.2$ make
+emacs-25.2$ sudo make install
+#+end_src
+
+* start
+** start with window
+#+begin_src sh
+$ emacs
+#+end_src
+** start without window
+#+begin_src sh
+$ emacs -nw
+#+end_src
