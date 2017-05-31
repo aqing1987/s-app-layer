@@ -1,0 +1,35 @@
+#+title: python check directory empty
+#+options: ^:nil
+
+* requirement
+If generated directory is empty, remove it.
+
+* code sample
+To check if the directory is empty, try `os.listdir'
+
+#+BEGIN_SRC api
+os.listdir(path='.')
+
+Return a list containing the names of the entries in the directory given by path.
+The list is in arbitrary order, and does not include the special entries '.' and '..'
+even if they are present in the directory.
+#+END_SRC
+
+Reference:
+https://docs.python.org/3/library/os.html#os.listdir
+
+Sample code as below:
+#+BEGIN_SRC python
+#!/usr/bin/env python3
+
+import os
+
+def check_empty(dir):
+  print(dir + " is : ")
+  if os.listdir(dir):
+    print('not empty')
+  else:
+    print('empty')
+
+check_empty('./testdir')
+#+END_SRC
