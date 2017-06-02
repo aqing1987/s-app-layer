@@ -1,8 +1,9 @@
 #+TITLE: The Importance of Sync in Embedded
+#+options: ^:nil
 
 * My experience
-When I modify /etc/init.d/rcS in development board, and restart
-the board once I have modified it, the modification disappear !!
+I modified /etc/init.d/rcS in development board, but after I
+restart the board, the modification disappear !!
 
 * Solution
 Before reboot, use 
@@ -12,7 +13,7 @@ Before reboot, use
 especially for newly modified config files, e.g. rcS
 
 * Sync Info
-use
+Check the sync manual:
 #+BEGIN_SRC sh
 $ info coreutils 'sync'
 #+END_SRC
