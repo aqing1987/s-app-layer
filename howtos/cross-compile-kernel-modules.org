@@ -1,0 +1,27 @@
+#+title: Cross Compile Kernel Modules
+
+* Description
+When we need to write a kernel module for a board, we need the
+cross compile skill.
+
+* Solution
+The key to cross compile is the Makefile. Sample as below:
+
+#+BEGIN_SRC Makefile
+MODULES := hello.o
+obj-m := $(MODULES)
+
+ARCH=arm
+COMPILER=arm-openwrt-linux-
+KDIR := /home/xyz/linux-3.14.43/
+PWD := $(shell pwd)
+
+MAKEARCH := $(MAKE) ARCH=$(ARCH) CROSS_COMPILE=$(COMPILER)
+
+all: modules
+modules:
+	$(MAKEARCH) -C $(KDIR) M=$(PWD) modules
+
+clean:
+	$(MAKEARCH) -C $(KDIR) M=$(PWD) clean
+#+END_SRC
