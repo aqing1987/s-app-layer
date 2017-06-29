@@ -1,0 +1,155 @@
+#+title: The Causes for Segmentation Fault
+#+options: ^:nil
+
+* reference
++ https://en.wikipedia.org/wiki/Segmentation_fault
+
+* Overview
+A segmentation fault occurs when a program attempts to access a memory
+location that it is not allowed to access, or attempts to access a memory
+location in a way that is not allowed (for example, attempting to write to
+read-only location, or to overwrite part of the operating system).
+
+At the hardware level, the fault is initially raised by the memory management
+unit (MMU) on illegal access (if the referenced memory exists), as part of its
+memory protection feature, or an invalid page fault (if the referenced
+memory does not exist). If the problem is not an invalid logical address but
+instead an invalid physical address, a bus error is raised instead.
+
+At the operating system level, this fault is caught and a signal is passed
+on to the offending process, activating the process's handler for that signal.
+Different operating systems have different signal names to indicate that a
+segmentation fault has occurred. On Unix-like operating system, a signal called
+SIGSEGV (abbreviated from segmentation violation) is sent to the offending
+process.
+
+The default action for segmentation fault or bus error is abnormal
+termination of the process that triggered it. A core file may be generated to
+aid debugging, and other platform-dependent actions may also be performed.
+
+* Causes
+The conditions under which segmentation violations occur and how they manifest
+themselves are specific to hardware and the operating system: different
+hardware raises different faults for given conditions, and different operating
+systems convert these to different signals that are passed on to processes.
+The proximate cause is a memory violation, while the underlying cause is
+generally a software bug of some sort. Determing the root cause - debugging
+the bug - can be simple in some cases, where the program will consistently
+cause a segmentation fault(e.g., dereferencing a null pointer), while in other
+cases the bug can be difficult to reproduce and depend on memory allocation
+on each run (e.g., deferencing a dangling pointer).
+
+The following are some typical causes of a segmentation fault:
++ Deferencing null pointers
+  (this is special-caused by memory management hardware)
++ Attempting to access a nonexistent memory address
+  (outside process's address space)
++ Attempting to access memory the program does not have rights to
+  (such as kernel structures in process context)
++ Attempting to write read-only memory(such as code segment)
+
+These in turn are often caused by programming errors that result in invalid
+memory access:
++ Deferencing or assigning to an uninitialized pointer
+  (wild pointer, which points to a random memory address)
++ Deferencing or assigning to a freed pointer
+  (dangling pointer, which points to memory that has been freed/deallocated
+  /deleted)
++ A buffer overflow
++ A stack overflow
++ Attempting to execute a program that does not compile correctly
+
+* examples
+In C code, segmentation faults most often occur because of errors in pointer
+use, particularly in C dynamic memory allocation. Deferencing a null pointer
+will always result in a segmentation fault, but wild pointers and dangling
+pointers point to memory that may or may not exist, and may or may not be
+readable or writable, and thus can result in transient bugs. For example:
+#+BEGIN_SRC c
+char *p1 = NULL;           // Null pointer
+char *p2;                  // Wild pointer: not initialized at all.
+char *p3  = malloc(10 * sizeof(char));  // Initialized pointer to allocated memory
+                                        // (assuming malloc did not fail)
+free(p3);                  // p3 is now a dangling pointer, as memory has been freed
+#+END_SRC
+
+Now, deferencing any of these variables could cause a segmentation fault:
+deferencing the null pointer generally will cause a segfault, while reading
+from the wild pointer may instead result in random data but no segfault, and
+reading from the dangling pointer may result in valid data for a while, and
+then random data as it is overwritten.
+
+** uninitialized pointer dereference
+#+BEGIN_SRC c
+char *p;
+p[0] = 'a';
+#+END_SRC
+
+** null pointer dereference
+Because a very common program error is a null pointer dereference(a read or
+write through a null pointer, used in C to mean "pointer to no object" and
+as an error indicator), most operating systems map the null pointer's address
+such that accessing it causes a segmentation fault.
+
+create a null pointer, and then tries to access its value (read the value).
+#+BEGIN_SRC c
+int *ptr = NULL;
+printf("%d", *ptr);
+#+END_SRC
+
+dereferencing a null pointer and then assigning to it (writing a value to
+a non-existent target)
+#+BEGIN_SRC c
+int *ptr = NULL;
+*ptr = 1;
+#+END_SRC
+
+** Writing to read-only memory
+The occurs when the program writes to part of its own code segment or the
+read-only portion of the data segment, as these are loaded by the OS into
+read-only memory.
+
+The string "hello world" is placed in the rodata section of the program
+executable file: the read-only section of the data segment. When loaded, the
+operating system places it with other strings and constant data in a read-only
+segment of memory. When executed, a variable, s, is set to point to the
+string's location, and an attempt is made to write an H character through the
+variable into the memory, cauing a segmentation fault.
+
+#+BEGIN_SRC c
+char *s = "hello world";
+*s = 'H';
+#+END_SRC
+
+** Buffer overflow
+In computer security and programming, a buffer overflow, or buffer overrun,
+is an anomaly where a program, while writing data to a buffer, overruns the
+buffer's boundary and overwrites adjacent memory locations.
+
+A buffer overflow occurs when data written to a buffer also corrupts data
+values in memory addresses adjacent to the destination buffer due to
+insufficient bounds checking. This can occur when copying data from one buffer
+to another without first checking that the data fits within the destination
+buffer.
+
+#+BEGIN_SRC c
+char A[8] = "";
+unsigned short B = 1979;
+
+// "excessive" is 9 characters long and encodes to 10 bytes
+// including the null terminator, but A can take only 8 bytes.
+// By failing to check the length of the string, it also overwrites
+// the value of B.
+strcpy(A, "excessive");
+#+END_SRC
+
+** Stack overflow
+In software, a stack overflow occurs if the call stack pointer exceeds the
+stack bound. The most common cause of stack overflow is excessively deep or
+infinite recursion.
+
+#+BEGIN_SRC c
+static void foo() {
+  return foo();
+}
+#+END_SRC
