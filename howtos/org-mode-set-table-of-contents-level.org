@@ -1,0 +1,25 @@
+#+title: Org mode set table of contents level
+#+options: ^:nil
+
+* reference
++ http://orgmode.org/org.html
+
+search *toc* in the page, and locates:
+#+BEGIN_SRC html
+toc:
+     Toggle inclusion of the table of contents, or set the level limit
+     (org-export-with-toc)
+#+END_SRC
+
+* why I need it
+If the paper has 5 levels of headings, the table of contents will also show
+5 levels of headings.
+
+It's ugly, we only need 2 levels in the table of contents.
+
+* fix
+keep the code below to you .emacs, and then restart emacs. Try to export your
+org-mode document again, you will get what you want.
+#+BEGIN_SRC lisp
+(setq org-export-with-toc 2)
+#+END_SRC
