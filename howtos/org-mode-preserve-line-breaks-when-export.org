@@ -1,0 +1,23 @@
+#+title: Org mode preserve line breaks when export
+#+options: ^:nil
+
+* reference
++ http://orgmode.org/org.html
+
+Search '\n' when you opened the page. and locates to:
+#+BEGIN_SRC html
+\n:
+    Toggles whether to preserve line breaks (org-export-preserve-breaks).
+#+END_SRC
+
+* why I need it
+When I write org-mode note, I can control the line width (80 columns I prefer).
+But when I export to html, the text line will reach to the full screen width.
+It's really a bad experience.
+
+* fix
+keep the code below to you .emacs, and then restart emacs. Try to export your
+org-mode document again, you will get what you want.
+#+BEGIN_SRC lisp
+(setq org-export-preserve-breaks t)
+#+END_SRC
