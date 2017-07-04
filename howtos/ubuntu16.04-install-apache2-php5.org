@@ -1,0 +1,53 @@
+#+TITLE: ubuntu16.04 install apache2 php5
+#+options: ^:nil
+
+* Install apache2
+#+BEGIN_SRC sh
+$ sudo apt-get install apache2 apache2-doc apache2-utils
+#+END_SRC
+
+* Install support for scripting
+#+BEGIN_SRC sh
+$ sudo apt-get install libapache2-mod-php php php-pear
+#+END_SRC
+
+* Install sqlite3 support for php
+#+BEGIN_SRC sh
+$ sudo apt-get install php-sqlite3
+#+END_SRC
+
+* Modify configurations
+** configuration files location
++ apache2 location
+#+BEGIN_SRC sh
+/etc/apache2/
+#+END_SRC
+
++ php location
+#+BEGIN_SRC sh
+/etc/php/7.0/
+#+END_SRC
+
+** change default port
+The port number defined in:
+#+BEGIN_SRC sh
+sudo vi /etc/apache2/ports.conf
+sudo vi /etc/apache2/sites-available/000-default.conf
+#+END_SRC
+
+change the default 80 to 8080
+
+** restart the service
+#+BEGIN_SRC sh
+sudo service apache2 restart
+#+END_SRC
+
+** test in the web browser
+test if we can open *localhost:8080*
+
+** change the web root ownership
+#+BEGIN_SRC sh
+sudo chown x:x /var/www/html
+#+END_SRC
+
+replace *x* by using your account name.
