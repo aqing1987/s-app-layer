@@ -1,0 +1,30 @@
+#+title: The Code Leads to VmSize Increase
+#+options: ^:nil
+
+* Description
+
+VmSize is the Virtual memory usage of the entire process. It's the sume of
+all mapped memory (/proc/pid/maps)
+
+* Code Sample
+the samples below will increase VmSize, indeed they are all bugs.
+
+** malloc without free
+#+BEGIN_SRC c
+static void LeakTest() {
+  char* msg = (char*) malloc(128);
+  sprintf(msg, "hello\n");
+}
+#+END_SRC
+
+** open file without close
+#+BEGIN_SRC c
+static void OpenFileWithoutClose() {
+  FILE *fp;
+
+  fp = fopen("/tmp/a.1", "a+");
+  if (fp) {
+    fputs("hello\n", fp);
+  }
+}
+#+END_SRC
