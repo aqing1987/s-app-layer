@@ -1,0 +1,20 @@
+#+title: add DNS support for ubuntu12.04 server
+#+options: ^:nil
+
+* description
+I used static ip in my ubuntu12.04 server, but I can't not access the internet,
+I can't ping through www.bing.com.
+
+* fix
+add `dns-nameservers' to /etc/network/interfaces, like code below:
+#+BEGIN_SRC config
+auto eth0
+iface eth0 inet static
+address 192.168.1.2
+gateway 192.168.1.1
+network 192.168.1.0
+dns-nameservers 8.8.8.8 8.8.4.4
+#+END_SRC
+
+Note the "s" at the end of "nameservers". You need to use "nameservers" even
+if you have only one.
