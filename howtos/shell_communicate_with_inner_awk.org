@@ -1,0 +1,90 @@
+#+title: shell communicate with inner awk
+#+options: ^:nil
+
+* shell invoke awk
+Write a simple shell script with awk embedded.
+
+#+BEGIN_SRC sh
+#!/bin/sh
+
+echo "a b c" > /tmp/xx
+
+awk '{ system("sleep "50); }' /tmp/xx
+
+#+END_SRC
+
+then check the process info:
+#+BEGIN_SRC sh
+$ ps -ef
+16457 15996  0 20:20 pts/26   00:00:00 sh tt.sh
+16458 16457  0 20:20 pts/26   00:00:00 awk { system("sleep "50); } /tmp
+16459 16458  0 20:20 pts/26   00:00:00 sh -c sleep 50
+16460 16459  0 20:20 pts/26   00:00:00 sleep 50
+
+$ cat /proc/16458/status
+Name:	awk
+State:	S (sleeping)
+Tgid:	16458
+Ngid:	0
+Pid:	16458
+PPid:	16457
+#+END_SRC
+
+It has been proved, when we execute awk statements, a child awk process
+created by the shell process.
+* pass value to awk process from shell process
+#+BEGIN_SRC sh
+#!/bin/sh
+
+echo "a b c" > /tmp/xx
+
+i=0
+awk -v i=50 '{
+  printf "%d\n", i;
+  i = i+1;
+  printf "%d\n", i;
+}' /tmp/xx
+
+echo $i
+#+END_SRC
+
+the result is that, we can only pass the value to awk process, but the
+original shell variable value cannot be modified by awk process.
+#+BEGIN_SRC sh
+$ sh tt.sh
+50
+51
+0
+#+END_SRC
+* communicate between awk and shell process
+One way to communicate between awk process and its parent shell process is
+creating file by using system() api.
+
+sample as below:
+#+BEGIN_SRC sh
+#!/bin/sh
+
+echo "a b c" > /tmp/xx
+
+awk -v i=50 '{
+  printf "%d\n", i;
+  i = i+1;
+  printf "%d\n", i;
+  cmd=sprintf("echo %d > /tmp/yy", i)
+  system(cmd)
+}' /tmp/xx
+
+echo ""
+echo "get value from /tmp/yy"
+cat /tmp/yy
+#+END_SRC
+
+the result is:
+#+BEGIN_SRC sh
+$ sh tt.sh
+50
+51
+
+get value from /tmp/yy
+51
+#+END_SRC

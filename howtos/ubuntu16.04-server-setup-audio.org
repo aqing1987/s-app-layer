@@ -1,0 +1,34 @@
+#+title: setup laptop audio for ubuntu 16.04 server
+#+options: ^:nil
+
+* description
+As default, there are no audio support in ubuntu 16.04 server.
+
+* fix solution
++ install pulseaudio and alsa-utils
+#+BEGIN_SRC sh
+$ sudo apt install pulseaudio
+$ sudo apt install pulseaudio-utils
+$ sudo apt install alsa-utils
+#+END_SRC
+
++ reboot the system
+#+BEGIN_SRC sh
+$ sudo reboot
+#+END_SRC
+
++ adjust the volume
+#+BEGIN_SRC sh
+$ alsamixer
+#+END_SRC
+
++ save the alsamixer config
+#+BEGIN_SRC sh
+$ sudo alsactl store
+#+END_SRC
+
++ test the audio (prepare the a.mp3 first)
+#+BEGIN_SRC sh
+$ sudo apt install mplayer
+$ mplayer a.mp3
+#+END_SRC

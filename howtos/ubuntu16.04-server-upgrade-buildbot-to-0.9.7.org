@@ -1,0 +1,70 @@
+#+title: upgrade buildbot from 0.8.12 to 0.9.7
+#+options: ^:nil
+
+* reference
+http://buildbot.net/
+
+* description
+We can install buildbot from ubuntu package repository:
+#+BEGIN_SRC sh
+$ sudo apt install buildbot
+#+END_SRC
+
+but its version(0.8.12) is too low, we decided to upgrade to the latest
+0.9.7 and taste the new flavor.
+
+* upgrade solution
++ stop current buildbot
+#+BEGIN_SRC sh
+$ cd buildbot/
+$ buildbot stop master/
+$ buildslave stop slave/
+#+END_SRC
+
++ remove previous installed buildbot
+#+BEGIN_SRC sh
+$ sudo apt remove buildbot
+$ sudo apt remove buildbot-slave
+#+END_SRC
+
++ upgrade pip
+#+BEGIN_SRC sh
+$ sudo apt update
+$ sudo pip install --upgrade pip
+#+END_SRC
+
++ install buildbot 0.9.7
+Buildbot is now composed of several Python packages and Javascript UI,
+and the easiest way to install it is to run the following command:
+#+BEGIN_SRC sh
+$ sudo pip install 'buildbot[bundle]==0.9.7'
+$ sudo pip install buildbot-worker
+$ sudo pip install setuptools-trial
+#+END_SRC
+
+If there is timeout issue, try again.
+
++ create the master and worker
+#+BEGIN_SRC sh
+$ mv master/ master-old
+$ mv slave/ slave-old
+$ buildbot create-master -r master
+$ buildbot-worker create-worker worker localhost example-worker pass
+#+END_SRC
+
++ upgrade master.cfg
+to use our old master.cfg, we should do some modifications.
+#+BEGIN_SRC info
+1. c['status'] should be replaced with c['www']
+2. buildbot.status should be considered deprecated
+3. the whole c['status'] configuration parameter is gone
+4. all reporters should be included in c['services']
+5. all identifiers, messages and documentation were updated to use "worker"
+   instead of "slave".
+#+END_SRC
+
++ start buildbot
+#+BEGIN_SRC sh
+$ buildbot start master
+$ buildbot-worker start worker
+#+END_SRC

@@ -1,0 +1,36 @@
+#+title: fix flymake not work for html issue
+#+options: ^:nil
+
+* reference
+https://www.emacswiki.org/emacs/FlymakeHtml
+
+* description
+os: ubuntu 16.04 desktop
+emacs: GNU Emacs 24.5.1
+
+The error info as below:
+#+BEGIN_SRC info
+switched OFF Flymake mode for buffer emacs-default-keys.html due to fatal
+status CFGERR, warning Configuration error has occurred while running
+(tidy emacs-default-keys_flymake.html)
+#+END_SRC
+
+* analysis
+current installed tidy is too old. Replace it by using tidy-html5.
+
+* fix steps
+#+BEGIN_SRC sh
+$ git clone https://github.com/htacg/tidy-html5.git
+
+$ sudo apt install xsltproc
+
+$ cd build/cmake
+
+$ cmake ../.. -DCMAKE_BUILD_TYPE=Release
+
+$ make
+
+$ sudo make install
+#+END_SRC
+
+After these operations, you can use flymake for html in emacs now.
