@@ -1,0 +1,61 @@
+#+title: Ubuntu16.04 install docker
+
+* reference
++ https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/
+
+* uninstall old version
+Older versions of Docker were called docker or docker-engine.
+If these are installed, uninstall them:
+#+BEGIN_SRC sh
+$ sudo apt-get remove docker docker-engine docker.io
+#+END_SRC
+
+* Install using the repository
+Before you install Docker CE for the first time on a new host machine, you
+need to set up the Docker repository. Afterward, you can install and update
+Docker from the repository.
+
+** SET UP THE REPOSITORY
+1. Update the apt package index:
+#+BEGIN_SRC sh
+$ sudo apt-get update
+#+END_SRC
+
+2. Install packages to allow apt to use a repository over HTTPS:
+#+BEGIN_SRC sh
+$ sudo apt-get install \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    software-properties-common
+
+#+END_SRC
+
+3. Add Docker’s official GPG key:
+#+BEGIN_SRC sh
+$ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+#+END_SRC
+
+4. set up the stable repository.
+#+BEGIN_SRC sh
+$ sudo add-apt-repository \
+   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+   $(lsb_release -cs) \
+   stable"
+#+END_SRC
+
+** INSTALL DOCKER CE
+1. Update the apt package index.
+#+BEGIN_SRC sh
+$ sudo apt-get update
+#+END_SRC
+
+2. Install the latest version of Docker CE
+#+BEGIN_SRC sh
+$ sudo apt-get install docker-ce
+#+END_SRC
+
+3. Verify that Docker CE is installed correctly
+#+BEGIN_SRC sh
+$ sudo docker run hello-world
+#+END_SRC
