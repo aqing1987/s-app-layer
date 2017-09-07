@@ -1,0 +1,93 @@
+#+title: Use docker to build openwrt aa
+
+* Prepare docker project
+
+** Create empty directory *pineapple-proj*
+#+BEGIN_SRC sh
+mkdir pineapple-proj
+cd pineaple-proj
+#+END_SRC
+
+** Put *Dockerfile* and *sources.list* to pineapple-proj
+*** Dockerfile content
+#+BEGIN_SRC Dockerfile
+FROM ubuntu:12.04
+
+# aliyun mirrors in China
+COPY sources.list /etc/apt/
+
+ENV TERM=xterm-256color
+
+RUN	apt-get update \
+	&& apt-get install -y gcc g++ binutils patch bzip2 flex bison make \
+	   autoconf gettext texinfo unzip sharutils subversion ncurses-term \
+	   zlib1g-dev gawk asciidoc git-core build-essential libssl-dev \
+	   mercurial libncurses5-dev vim wget \
+	&& apt-get clean \
+	&& groupadd -g 1000 xyz \
+	&& useradd -u 1000 -g 1000 -G sudo -m xyz \
+	&& mkdir /home/xyz/pineapple \
+	&& chown xyz:xyz /home/xyz/pineapple \
+	&& echo "root:123" | chpasswd \
+    && chsh -s /bin/bash xyz
+
+USER xyz
+WORKDIR /home/xyz
+ENV TERM=xterm-256color
+
+MAINTAINER Kevin Chen
+#+END_SRC
+
+*** aliyun apt sources.list
+#+BEGIN_SRC sources.list
+deb http://mirrors.aliyun.com/ubuntu/ precise main restricted universe multiverse
+deb http://mirrors.aliyun.com/ubuntu/ precise-security main restricted universe multiverse
+deb http://mirrors.aliyun.com/ubuntu/ precise-updates main restricted universe multiverse
+deb http://mirrors.aliyun.com/ubuntu/ precise-proposed main restricted universe multiverse
+deb http://mirrors.aliyun.com/ubuntu/ precise-backports main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ precise main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ precise-security main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ precise-updates main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ precise-proposed main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ precise-backports main restricted universe multiverse
+#+END_SRC
+
+
+
+* Build the Dockerfile and tag the Image as ubu12-pineapple
+#+BEGIN_SRC sh
+sudo docker build -t ubu12-pineapple .
+#+END_SRC
+
+after the operation, check the images:
+#+BEGIN_SRC sh
+➜  pineapple-proj sudo docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+ubu12-pineapple     latest              b39a342214ce        4 minutes ago       1.12GB
+ubuntu              12.04               5b117edd0b76        4 months ago        104MB
+#+END_SRC
+
+* Create container with docker run
+
+#+BEGIN_SRC sh
+# -t : allocate a pseudo-tty
+# -i : keep STDIN open even if not attached
+# --name : assign a name to the container
+# -v : create a bind mount, if you specify, -v /HOST-DIR:/CONTAINER-DIR
+
+sudo docker run -it --name c-pineapple -v ~/workspace/moon/pineapple-git/sdk_aa/:/home/xyz/pineapple ubu12-pineapple
+#+END_SRC
+
+* Start container with docker start
+After the c-pineapple container created, when it stopped, use docker start
+to start the pineapple container.
+
+#+BEGIN_SRC sh
+# -a : attach STDOUT/STDERR and forward signals
+# -i : attach container's STDIN
+
+sudo docker start -ai c-pineapple
+#+END_SRC
+
+
+
