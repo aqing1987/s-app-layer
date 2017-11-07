@@ -1,0 +1,85 @@
+#+title: ubuntu16.04 install tensorflow
+#+options: ^:nil
+
+* reference
++ https://www.tensorflow.org/install/install_linux
+
+* determine which TensorFlow to install
+I use TensorFlow with CPU support only.
+
+* Determine how to install TensorFlow
+I use virtualenv
+
+* install with virtualenv
++ Install pip and virtualenv by issuing one of the following commands
+#+BEGIN_SRC sh
+$ sudo apt-get install python-pip python-dev python-virtualenv # for Python 2.7
+ $ sudo apt-get install python3-pip python3-dev python-virtualenv # for Python 3.n
+#+END_SRC
+
++ Create a virtualenv environment by issuing one of the following commands:
+#+BEGIN_SRC sh
+$ virtualenv --system-site-packages targetDirectory # for Python 2.7
+ $ virtualenv --system-site-packages -p python3 targetDirectory # for Python 3.n
+#+END_SRC
+
+where targetDirectory specifies the top of the virtualenv tree. Our
+instructions assume that targetDirectory is ~/tensorflow, but you may
+choose any directory.
+
++ Activate the virtualenv environment by issuing one of the following commands:
+#+BEGIN_SRC sh
+$ source ~/tensorflow/bin/activate # bash, sh, ksh, or zsh
+ $ source ~/tensorflow/bin/activate.csh  # csh or tcsh
+#+END_SRC
+
+The preceding source command should change your prompt to the following:
+#+BEGIN_SRC sh
+(tensorflow)$
+#+END_SRC
+
++ Ensure pip ≥8.1 is installed:
+#+BEGIN_SRC sh
+(tensorflow)$ easy_install -U pip
+#+END_SRC
+
++ Issue one of the following commands to install TensorFlow in the active virtualenv environment:
+#+BEGIN_SRC sh
+(tensorflow)$ pip install --upgrade tensorflow      # for Python 2.7
+ (tensorflow)$ pip3 install --upgrade tensorflow     # for Python 3.n
+ (tensorflow)$ pip install --upgrade tensorflow-gpu  # for Python 2.7 and GPU
+ (tensorflow)$ pip3 install --upgrade tensorflow-gpu # for Python 3.n and GPU
+#+END_SRC
+
+* Next Steps
+After installing TensorFlow, validate the installation.
+
+Note that you must activate the virtualenv environment each time you use
+TensorFlow. If the virtualenv environment is not currently active,
+invoke one of the following commands:
+#+BEGIN_SRC sh
+$ source ~/tensorflow/bin/activate      # bash, sh, ksh, or zsh
+$ source ~/tensorflow/bin/activate.csh  # csh or tcsh
+#+END_SRC
+
+When the virtualenv environment is active, you may run TensorFlow programs
+from this shell. Your prompt will become the following to indicate that your
+tensorflow environment is active:
+#+BEGIN_SRC sh
+(tensorflow)$
+#+END_SRC
+
+When you are done using TensorFlow, you may deactivate the environment by
+invoking the deactivate function as follows:
+#+BEGIN_SRC sh
+(tensorflow)$ deactivate
+#+END_SRC
+
+The prompt will revert back to your default prompt (as defined by the PS1
+environment variable).
+
+* Uninstalling TensorFlow
+To uninstall TensorFlow, simply remove the tree you created. For example:
+#+BEGIN_SRC sh
+$ rm -r targetDirectory
+#+END_SRC
