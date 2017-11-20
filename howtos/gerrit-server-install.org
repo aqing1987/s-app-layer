@@ -32,7 +32,7 @@ create a database, and give the newly created user full rights on it:
 #+BEGIN_SRC sh
 mysql
 
-  CREATE USER 'gerrit2'@'localhost' IDENTIFIED BY 'secret';
+  CREATE USER 'gerrit2'@'localhost' IDENTIFIED BY 'gerrit2';
   CREATE DATABASE reviewdb;
   ALTER DATABASE reviewdb charset=latin1;
   GRANT ALL ON reviewdb.* TO 'gerrit2'@'localhost';
@@ -107,7 +107,7 @@ sudo vi /etc/apache2/sites-enabled/000-default.conf
 *** reverse proxy
 sudo vi /etc/apache2/httpd.conf
 #+BEGIN_SRC sh
-ServerName s.han-networks.com   
+ServerName s.x.com
 <VirtualHost *:8080>
     ProxyRequests Off
 	ProxyVia Off
@@ -115,20 +115,20 @@ ServerName s.han-networks.com
 	AllowEncodedSlashes On
 	RewriteEngine On
 	RewriteRule ^/(.*) http://192.168.20.52:8081/$1 [NE,P]
-						  
+
 	<Proxy *>
 		Order deny,allow
 		Allow from all
 	</Proxy>
-										  
+
 	<Location /login/>
-		AuthType Basic  
+		AuthType Basic
         AuthName "Gerrit Code Review"
         Require valid-user
 		AuthBasicProvider file
 		AuthUserFile /home/gerrit2/review_site/etc/passwd
     </Location>
-	    
+
 	ProxyPass / http://192.168.20.52:8081/
 </VirtualHost>
 #+END_SRC
@@ -216,6 +216,8 @@ users.
 ** gerrit has failed to create some tables
 solution: create the missing tables manually in the MySQL database.
 #+BEGIN_SRC mysql
+mysql> use reviewdb
+
 CREATE TABLE account_group_by_id_aud ( 
 added_by INT DEFAULT 0 NOT NULL, 
 removed_by INT, 
