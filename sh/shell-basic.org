@@ -1,0 +1,416 @@
+#+title: Shell basic
+#+options: ^:nil
+
+* get into the shell
+** Command Line Interface
+Any computer interface where the user enters textual commands and gets textual
+responses is a CLI.
+
+The terminal interface uses text instead of graphics.
+
+** shell single quote
+
+When you get something like this, with a right angle bracket:
+#+BEGIN_SRC sh
+aa@aa~$ alice's tea party
+>
+#+END_SRC
+
+That'll happen if you type something with a single quote mark, or with a parenthesis,
+or brace.
+In order to get your shell prompt back, with an arrow message, you have to type
+the matching quote mark, or parenthesis, or brace. Then you'll get a command not
+found and you get your show prompt back.
+
+** curl
+curl is a command for downloading files from the web.
+e.g.
+#+BEGIN_SRC sh
+curl http://udacity.github.io/ud595-shell/stuff.zip -o things.zip
+#+END_SRC
+** cowsay
+A funny terminal tool. You should install it before using.
+
+and try:
+#+BEGIN_SRC sh
+$ cowsay hello, world!
+#+END_SRC
+
+** the terminal vs the shell
+The terminal is a program that draws text in a window, and lets you type things
+in on a keyboard. Technically it's called a terminal emulator, since it acts
+like one of those old school hardware terminals. It displays output on the screen
+and it accepts input from the keyboard.
+
+But the terminal itself doesn't know what to do with that input. It needs another
+program to do that. In this case, that program is the shell. When you type things
+in the terminal just sends what you type to that separate program. When you press
+Enter, the shell interprets what you wrote as a command, figures out what program
+you want to run, runs it and sends the output back to the terminal so you can see
+it.
+
+You could actually use the terminal without the shell, with a log of terminal
+programs you can tell it what program to run. The default is a shell, but you can
+have it run say, the Python interpreter instead.
+
+Also, there are actually a log of different shell programs that you can choose
+from. The default one on most Linux systems, and on the Mac, is called GNU Bash.
+But there are others called TCSH, KSH and Seashell. They all work slightly differently
+and have various different features.
+
+And you can also use a shell without the terminal, sort of. You can wirte shell
+commands into a file and arrange for your computer to run the shell program on
+that file. This is called shell scripting.
+
+*** different shells
+Unix and Linux programmers over the years have written many different shell
+programs. You can read more about them on Wikipedia: the original Bourne shell
+or sh; the C shell or csh; the Korn shell or ksh; the Z shell or zsh; as well
+as the bash shell.
+
+Different systems may have different shells installed by default. Most Linux
+systems, and Mac OS X, default to bash for interactive shells. However, the most
+common default shell for scripting (shell programming) is classic sh. BSD Unix
+systems usually default to sh or ksh.
+
+** try more commands
+# prints date and time
+#+BEGIN_SRC sh
+$ date
+#+END_SRC
+
+hostname prints out the computer's own name for itself
+#+BEGIN_SRC sh
+$ hostname
+#+END_SRC
+
+host is pretty different from hostname. It looks up a name in the DNS or
+domain name srvice to find out its IP address and also other information.
+#+BEGIN_SRC sh
+host baidu.com
+#+END_SRC
+
+the expr command is a simple calculator
+#+BEGIN_SRC sh
+$ expr 2 + 2
+#+END_SRC
+
+echo is just the shells name for the print statement, it just repeats back
+whatever you give it, like an echo.
+#+BEGIN_SRC sh
+$ echo you rock
+#+END_SRC
+
+tells you what version number of the bash shell you have installed
+#+BEGIN_SRC sh
+$ bash --version
+#+END_SRC
+
+the history command tells you all the commands you've run previously.
+#+BEGIN_SRC sh
+$ history
+#+END_SRC
+
+uname prints out the operating system's name for itself, you can get a lot
+more information with uname -a, by the way.
+#+BEGIN_SRC sh
+$ uname
+#+END_SRC
+** what is a shell command
+When you have used programming languages before such as Python or JavaScript,
+you've been exposed to concepts such as function and statement. Commands that
+you run at the shell prompt are a little bit like function calls.
+
+You could even do some of the same things in the shell and in code, like the
+command to delete a file in the shell is rm, which stands for remove And it
+works like this. And you could do the same thing in Python with the remove
+function in the OS module, os.remove.
+
+A shell command and a python function have a lot in common. They're both units
+of code, they both have a name, and they can both take arguments. But, they
+exist in pretty different contexts. Most commands that you run in the Shell are
+actually whole programs that are started up as separate processes on your computer.
+
+Running a shell command in your terminal is a lot like calling a function in a
+program. But the two techniques are used in different ways. Functions are used
+to organize a program while Shell Commands are used to run programs. Since shell
+commands output their results in text, it's easy to read and understand what's
+going on.
+** reading the output of a command
+When using the shell, no news is usually good news.
+
+* shell commands
+** filenames and contents
+Linux is really flexible about file names. There's no hard rule that a particular
+kind of file has to have a particular kind of name. The file system doesn't require
+that files have extensions on the end of their names. If you're coming from Windows,
+that can be a big change. You can see for instance, a file called readme instead of
+readme.txt, but it's still a text file. But just as on other systems, there are
+conventions. If you don't know what a file is, you can use your favorite search
+engine to look up the extension on the end of the file name. Or, if there isn't
+one, the whole file name and maybe something about the context. So, given what
+you already know, and what you can find with some quick searching, see if you can
+say what each of these files is likely to be. What type of things do you expect
+to find in each of these files?
+#+BEGIN_SRC info
+Hello-Kitty.jpg    - photograph
+LICENSE            - plain text
+README.md          - markdown document
+superuser.pem      - crypto key
+install.sh         - shell script
+#+END_SRC
+** command history
+If you type a command and you don't get it right, or if you just want to recall
+something that you've used before, try using the up arrow key. The shell keeps
+a history of commands that you've run so you can walk back through them using
+the arrow keys. Then you can edit a previous command line that you've used and
+maybe get some more success.
+
+There are a couple of other ways to access the shell history. One of them you've
+seen is the command *history*, which points out the whole history. This doesn't
+just include history from the current shell session, you can also see commands
+you ran in the past.
+
+Another one is the keystroke *control R*. This is a special function, called
+reverse i search, which lets you search your shell history. This is awfully handy
+if you used some command long ago or just yesterday and it's long command and
+you want to recall it now.
+** some common commands
++ ls
+  ls lists the files in the current directory.
+
++ unzip
+  The unzip command typically takes one argument. The file name of the file
+  to unzip. As it works, unzip lists the files and directories it's uncompressing.
+
++ cat
+  give cat a list of file names and it'll print out the contents of the files.
+  You can also use cat to read a single file. Just give it one file name. A lot
+  of people use cat as their go to command for reading short files.
+
++ wc
+  wc is the word count program. It tells us how many lines, words, and bytes are
+  in a file.
+
++ diff
+  diff compares files and shows you how they differ. This can be useful if you
+  have multiple versions or editions of the same file and you want to know what
+  changes have been made.
+
+
+** manual pages
+There's a lot to remember when using the terminal. You can't just click around
+and explore menus like you can with a graphical program. This doesn't mean that
+you need to remember every command and every option though. Looking things up
+is a regular part of the terminal user's workflow. In fact, it's normal to forget
+the details of commands you don't use frequently.
+
+Cowsay is an example of a program with a bunch of options. By default, cowsay
+draws a cow, but you can customize it too. For example, by using the -e argument,
+we can replace its eyes with carets. We can also draw a penguin instead of a cow.
+So, how do we keep up with all these options? Fortunately, all common shell programs
+come with a manual, and there's a command that makes it easy to read them, man.
+Manual entries are called man pages, and this is cowsay's man page. Man pages
+follow a common format. The first section includes the command's name and a brief
+description of the command. The next section is the synopsis. The synopsis explains
+how to use the command's flags and arguments. Options surrounded by square brackets
+are optional. In this case, all of cowsay's options are optional. Some options
+require additional information. For example, if you use the -e flag, you also
+need to supply an eye_string. The description describes all of the options in
+detail. Man pages vary in how they present this information. Some man pages alphabetize
+their option, while cowsay's man page is a bit less organized. You can use the
+arrow keys to scroll up and down the man page. The later sections of the man page
+include more detailed information about the command.
+
+Man pages are typically arranged so that the most important details are near the top.
+When you're done referencing the manual, you can press q to exit.
+** researching commands
+There are a lot of other resources besides the manual for finding out about
+shell command stuff. Even experienced users can always find something new that
+can be done in the shell. But if you don't know what a command does and you're
+not sure if you want to run it, applying your favorite search engine to the
+problem is a good idea. You can put any shell command into Google or DuckDuckGo
+or Yahoo or whatever and usually find a lot of help.
+
+Another useful tool for researching commands is the *aprops* command. You can
+use *aprops* to find commands relevant to particular keywords.
+
+For example *aprops working directory* provides a list of commands that somehow
+work with the current working directory.
+
+*apropos* is good for refreshing your memory, or for finding new commands to
+explore!
+
+** line based programs
+You've seen several commands, like ls, uptime, and cowsay that do something,
+and then immediately return you to the shell prompt. But not all programs do
+that. Some programs are a little bit more interactive. They take over the terminal
+for as long as they're running, and then we get the shell back when the program
+exits. Take, for instance, ping. Ping lets you test whether another machine on
+the internet is alive, and how long it takes to send a message to that machine
+and back. Let's see you ping 8.8.8.8, which is Google's public DNS server. Very
+fast and well connected, so we should always be able to get to it. Ping starts
+and it prints out a line for each successful echo, but it doesn't stop on its
+own and give you your shell back. Instead, you have to tell it to stop. One of
+the most common ways to tell a program like this to stop is to type *Ctrl+C* which
+sends the interrupt signal. When you do that, ping stops, prints out a summary,
+and you get your shell prompt back.
+
+But some programs have a different behavior. There's a really common design in
+Linux programs where a program will read from what's called standard input, or
+stdin and write to what's called standard output, or stdout. This allows programs
+to be chained together on to a pipeline. When you run a program like this from
+the terminal, it'll read from your keyboard input and write back to the terminal
+screen. And very often when your input is done you want to send it an end of file
+character which you do by typing *Ctrl+D*. Here's an example, The sort program,
+which sorts lines in alphabetical order, if you run sort and then type or paste
+in some text, it will print those lines out sorted. But it can't do any sorting
+until it's received the last line and that's what typing *Ctrl+D* tells it. You
+have to use *Ctrl+D* instead of *Ctrl+C* if you want the sorted output. *Ctrl+C*
+will just cause it to exit.
+
+Programs like sort are called line based programs because they read input one
+line at a time until they reach the end of the input. You can usually use them
+on files as well as on text that you type in or paste into the terminal.
+** waiting for input
+Sometimes a program will be waiting for input, and if you want to get your shell
+back, you have to know how to tell it either that the input is over or that it
+should exit.
+
+Let's take another look at an example. BC is a simple calculator program, you
+can use it to do arithmetic. It knows about order of operations and parenthesis
+and things like that. But when you're done using it and you want to exit, what
+do you do?
+
+Type "quit" or press *Ctrl+D*
+
+
+** full screen interactive programs: less
+The man program, for reading the manual takes up a full terminal screen. It's
+actually use another program called less that knows how to display text one page
+at a time. So when you press Q to stop looking at a manual page. You're actually
+using a command that less understands. And you can use less to display any file
+you like not just man pags.
+
+Scrolling up and down with arrow keys works the same way as it did before, and
+man you can also scroll down a page at a time by using the *D* key or by hitting
+the *Space Bar*. You can scroll up one page at a time with a *U* key. If you want
+to skip to very last line of the file, you can use the *right angle bracket* for
+that. To get back up to the first line use the *left angle bracket*. You can go
+to a particular line by typing its *line number* and hitting Enter.
+
+This is particularly useful when working with source code where you know the line
+numbers of important lines. It's also useful when you decide to quickly move to
+the middle of a file.
+
+Less also has built-in search. Type *slash* and then the string you'd like to
+search for. Press Enter or return to execute the search. You can find the next
+occurrence of the search term by pressing *n*. To go bak to the previous occurrence,
+use capital *N*. Search terms are case sensitive. If you're familiar with regular
+expressions you can also use them here.
+
+** editing files in nano
+You can run nano on any text file you happen to have on your Linux box. It takes
+the file to edit as a command line parameter.
+
+Control-X, usually written ^X, is the keystroke command to exit nano.
+* the linux filesystem
+** the filesystem tree
+The two most important kinds of objects in a Linux server's filesystem are files
+and directories. The rules for file and directory names in Linux are pretty flexible.
+You can have spaces and filenames, you can have dots, you can at signs or accent
+marks or whatever. The only thing you can't have is the slash character(/). And in
+the shell, when you write a file name that contains spaces or certain punctuation
+marks wuch as *!$#()[]%&*, you have to put the file name in single quotes(''), or else
+precede each one of the special characters including spaces with the back slash (\).
+The reason for this is that these characters all have special meanings to the shell,
+and putting a backslash(\) in front of them tells the shell to treat them as ordinary
+characters.
+
+Directories are nested inside each other, with the outermost or topmost being the
+file system root or root directory. It's very common for there to be multiple discs
+or disc partitions on a Linux system. Unlike on Windows, there aren't separate roots
+for each disc, like C: or D: drives. There's just one filesystem root at the top of
+the filesystem. This means that no matter what directory a file is in, you can
+unambiguously refer to that file by giving the full path which starts at the root
+and lists each directory on the way down to the individual file. The directory names
+are separated by slashes.
+
+Linux uses the forward slash to separate directories, whereas Windows uses the
+back slash. The forward slash is the same one that you see in URLs, like
+https://www.google.com, or for writing fractions like 2/3, or in various other
+uses.
+
+** the working directory
+Your shell, and every other program for that matter, has a working directory.
+You can think of this as the directory that it's looking at or focused on, or
+the one that it uses as the default location for most commands to find files in.
+
+** absolute and relative paths
+So, the top most directory in the file system is the root directory. And we
+denote the root directory with a slash. You can describe the location of any
+file or directory in the file system, with a full path beginning with a slash.
+The full path is called the absolute path, and that means that it tells every
+step that has to be taken from the root, or the absolute beginning of the file
+system. Absolute paths are unambiguous and easy to understand, but they can also
+be inconvenient to work with, especially if you're working with deeply nested
+directories. To make things simpler, we can use relative paths instead. A file's
+relative path, is its location relative to the current working directory. If you're
+working with files in or near the current working directory, this can save you
+a lot of typing. Every time you've referred to a file by just its name, you've
+actually been using a relative path.
+
+'.' points from each directory to itself.
+'..' points from a directory to its parent.
+~ is an abbreviation for you own home dirctory.
+** cd without args
+*cd* without arguments is a shortcut to take you home. As long as your home
+directory exists, you can always go home.
+** cd to not a dirctory
+If you tried to CD a file, or cat a directory for that matter, you'll just get
+a harmless error message.
+** tab completion
+Typing in long directory and file names is a big, boring pain and nobody likes
+doing it. One way you can avoid running out of fingers is to use tab completion.
+It works pretty much the same as tab completion for commands. As you're typing
+a command or file path, just hit the tab key. If you've typed enough to distinguish
+a single command or a single file, the shell will automatically complete it.
+Otherwise it will go beep. Then if you press tab again it'll list all of the
+possible completions for what you've typed.
+** globbing
+Any time you want to operate on a bunch of files that have similar names, you can
+use a glob pattern to do it. I am not making up this name. Globbing is the real,
+actual, technical term for matching files by name in the Unix shell. Seriously,
+globbing. If you don't believe me you can look it up, man glob. Globbing is a
+kind of pattern matching for file names. When you write a glob pattern in a shell
+command, the shell turns that pattern into a list of file names that exist to
+match the pattern.
+
+For instance, a star matches any string of characters. You can use a star at
+the beginning or at the end of a pattern. Patterns can be all sorts of differnet
+lengths. A star can appear in the middle of a pattern.
+#+BEGIN_SRC sh
+ls b*png
+#+END_SRC
+Matching all the files that start with B and end with png.
+
+#+BEGIN_SRC sh
+ls app.{css,html}
+#+END_SRC
+match files that end in either css or html.
+
+#+BEGIN_SRC sh
+ls bea?.png
+#+END_SRC
+A single question mark matches any one character.
+
+#+BEGIN_SRC sh
+ls be??.png
+#+END_SRC
+Two question marks matches two characters, and so on.
+
+#+BEGIN_SRC sh
+ls be[aeiou]r.png
+#+END_SRC
+list of characters inside square brackets matches any one of the characters
+inside those brackets.
