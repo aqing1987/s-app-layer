@@ -1,0 +1,24 @@
+#+title: Gerrit fix missing Change-Id issue
+#+options: ^:nil
+
+* issues
+When I do push operation:
+#+BEGIN_SRC sh
+git push origin HEAD:refs/for/master
+#+END_SRC
+
+I got the following error:
+#+BEGIN_QUOTE
+remote: Processing changes: refs: 1, done
+remote: ERROR: [b8bdbbc] missing Change-Id in commit message footer
+remote:
+#+END_QUOTE
+
+* fix
+For the future, we should install commit hook, which automatically adds the
+required Change-Id.
+
+Execute:
+#+BEGIN_SRC sh
+scp -p -P 29418 aa@192.168.1.139:hooks/commit-msg .git/hooks/
+#+END_SRC

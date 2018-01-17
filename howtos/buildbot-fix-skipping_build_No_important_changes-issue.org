@@ -1,0 +1,63 @@
+#+title: buildbot fix `skipping build - no important changes' issue
+#+options: ^:nil
+
+* background
+I use buildbot 0.9.7.
+
+But when I commit some changes about *.js* files, the nightly build will not
+be triggered.
+
+Check the *master/twistd.log*
+I got the following info:
+#+BEGIN_QUOTE
+Nightly scheduler <YY-Nightly>: skipping build - No important changes
+#+END_QUOTE
+
+* analysis
+I read the buildbot doc, and find a clue:
+
+#+BEGIN_QUOTE
+*Files*
+It also has a list of *files*, which are just the tree-relative filenames of
+any files that were added, deleted, or modified for this *Change*. These
+filenames are used by the *fileIsImportant* function (in the scheduler) to
+decide whether it is worth triggering a new build or not.
+
+*fileIsImportant*
+A callable which takes one argument, a Change instance, and returns True if the
+change is worth building, and False if it not. Unimportant Changes are accumulated
+until the build is triggered by an important change. The default value of None
+means that all Changes are important.
+
+*onlyImportant*
+A boolean that, when True, only adds important changes to the buildset as specified
+in the *fileIsImportant* callable. This means that unimportant changes are ignored
+the same way a *change_filter* filters changes. This defaults to False and only
+applies when *fileIsImportant* is given.
+#+END_QUOTE
+
+The buildbot code path:
+#+BEGIN_SRC sh
+/usr/local/lib/python2.7/dist-packages/buildbot
+#+END_SRC
+
+* fix steps
+add
+#+BEGIN_SRC python
+fileIsImportant=None,
+onlyImportant=False,
+#+END_SRC
+
+to *schedulers.Nightly*. Code as below:
+#+BEGIN_SRC python
+c['schedulers'].append(schedulers.Nightly(
+    name='yy-Nightly',
+    branch=branch_name,
+    change_filter=util.ChangeFilter(branch=branch_name),
+    builderNames=["yyb"],
+    hour=23,
+    minute=00,
+    fileIsImportant=None,
+    onlyImportant=False,
+    onlyIfChanged=True))
+#+END_SRC
