@@ -1,0 +1,41 @@
+#+title: Go fix cannot find package issue
+#+options: ^:nil
+
+* reference
++ https://github.com/golang/go/issues/9976
+
+* description
+When I do the *Exercise: Slices* on a tour of Go
+
+The following issue comes:
+#+BEGIN_QUOTE
+➜  moretypes git:(next) go build exercise-slices.go
+exercise-slices.go:3:8: cannot find package "golang.org/x/tour/pic" in any of:
+	/usr/local/go/src/golang.org/x/tour/pic (from $GOROOT)
+	/home/workspace/go/src/golang.org/x/tour/pic (from $GOPATH)
+#+END_QUOTE
+
+* fix steps
+** go get the package
+#+BEGIN_SRC sh
+$ go get golang.org/x/tour/pic
+#+END_SRC
+
+But the following issue comes again:
+#+BEGIN_QUOTE
+➜  moretypes git:(next) go get golang.org/x/tour/pic
+package golang.org/x/tour/pic: unrecognized import path "golang.org/x/tour/pic"
+(https fetch: Get https://golang.org/x/tour/pic?go-get=1: dial tcp
+[2a00:1450:400e:800::200e]:443: connect: network is unreachable)
+#+END_QUOTE
+
+The reason is that `golang.org` cann't be accessed from China mainland.
+
+*** activate proxy
+
+Activate the proxy at shell help to *go get*
+#+BEGIN_SRC sh
+export {http,https,ftp}_proxy='http://127.0.0.1:8118'
+#+END_SRC
+
+Note: make sure you have the proxy first.
