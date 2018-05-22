@@ -1,0 +1,29 @@
+# static lib test
+## compile
+$ gcc -Wall -c a.c
+
+## create static lib
+$ ar -cvr libx8.a a.o
+
+## list files in a static library
+$ ar -t libx8.a
+
+## linking with a static library
+$ gcc -o t1 tt.c -L. -lx8
+
+## run
+$ ./t1
+
+# dynamic lib test
+## compile our library source code into position-independent code(PIC):
+$ gcc -c -Wall -fpic a.c
+
+## create a shared library from an object file
+$ gcc -shared -o libx9.so a.o
+
+## linking with a shared library
+$ gcc -Wall -o t2 tt.c -lx9 -L.
+
+## making the library available at runtime
+$ export LD_LIBRARY_PATH=.:$(LD_LIBRARY_PATH)
+$ ./t2
