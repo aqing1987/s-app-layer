@@ -1,7 +1,7 @@
 // methods for the Tv class (Remote methods are inline)
 
 #include <iostream>
-#include "tv.h"
+#include "tvfm.h"
 
 bool Tv::volup() {
   if (volume < MaxVal) {

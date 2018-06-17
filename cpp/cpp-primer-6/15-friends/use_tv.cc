@@ -1,6 +1,6 @@
 // using the Tv and Remote classes
 #include <iostream>
-#include "tv.h"
+#include "tvfm.h"
 
 int main(int argc, char *argv[]) {
   using std::cout;

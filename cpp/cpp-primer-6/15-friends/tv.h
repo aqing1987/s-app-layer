@@ -1,6 +1,9 @@
 #ifndef TV_H_
 #define TV_H_
 
+// making the entire Remote class a friend doesn't need a forward
+// declaration because the friend statement itself identifies
+// Remote as a class
 class Tv {
  public:
   friend class Remote; // Remote can access Tv provate parts
