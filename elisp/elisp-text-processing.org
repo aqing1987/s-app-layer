@@ -1,0 +1,166 @@
+#+title: Elisp Text Processing
+
+* Introduce
+In emacs, a user can program it using the embedded language (called
+Emacs Lisp, or elisp) so that he can have custom functions to 
+insert texts, templates, process files, and many other features of
+emacs.
+
+Emacs provides functions for text manipulation.
+
+* Example of Simple Elisp Functions
+** Cursor Position
+#+BEGIN_SRC elisp
+  ;; current cursor position is called "point".
+  ;; Left of first char in buffer is 1
+  ;; This returns the current cursor position
+  (point)
+
+  ;; returns the position of the beginning/end of region (selection)
+  (region-beginning)
+  (region-end)
+
+  ;; position for beginning/ending of current line
+  (line-beginning-position)
+  (line-end-position)
+
+  ;; returns the position for the beginning/ending of buffer, taking
+  ;; account of narrow-to-region
+  (point-min)
+  (point-max)
+#+END_SRC
+
+By default, cursor is shown as black square, over a character,
+the position is to the left of the black square.
+
+** Move Cursor, Search Text
+#+BEGIN_SRC elisp
+  ;; move cursor to position 39
+  (goto-char 39)
+
+  ;; move cursor by 4 chars
+  (forward-char 4)
+  (backward-char 4)
+
+  ;; move cursor to the location of a string
+  ;; returns the new position
+  (search-forward "some") ; to end of "some"
+  (search-backward "some") ; to beginning of "some"
+
+  ;; move cursor to the location matched by a regex
+  ;; returns the new position
+  (re-search-forward "[0-9]") ; digit
+  (re-search-backward "[0-9]")
+
+  ;; move cursor to the first char that's not "a to z"
+  ;; returns the distance traveled.
+  (skip-chars-forward "a-z")
+  (skip-chars-backward "a-z")
+
+#+END_SRC
+
+** Delete, Insert, Change, Text
+#+BEGIN_SRC elisp
+  ;; 9 chars starting at current cursor position
+  (delete-char 9)
+
+  ;; delEting Text From Pos3 To 10
+  (Delete-Region 3 10)
+
+  ;; Insert String At Current Cursor Position
+  (Insert "I ♥ Cats")
+
+  ;; Get The String From Pos 71 To 300
+  (Setq X (Buffer-Substring 71 300))
+
+  ;; Capitalize Letters In A Region
+  (Capitalize-region 71 300)
+#+END_SRC
+
+** String
+#+BEGIN_SRC elisp
+  ;; length
+  (length "abc")
+
+  ;; substring
+  (substring "abcdefg" 3 4)
+
+  ;; change a given string using regex
+  (replace-regexp-in-string "[0-9]" "x" "abc123")
+  ;; returns "abcxxx"
+#+END_SRC
+
+** Buffer
+#+BEGIN_SRC elisp
+  ;; return the name of current buffer
+  (buffer-name)
+
+  ;; return the full path of current file
+  (buffer-file-name)
+
+  ;; switch to the buffer name xyz
+  (set-buffer "xyz")
+
+  ;; save current buffer
+  (save-buffer)
+
+  ;; close a buffer named xyz
+  (kill-buffer "xyz")
+
+  ;; temporarily sets a buffer as current to work with
+  (with-current-buffer "xyz"
+    ;; do something here. delete/insert text, etc.
+    )
+#+END_SRC
+
+** File
+#+BEGIN_SRC elisp
+  ;; open a file (in a buffer)
+  (find-file "~/")
+
+  ;; same as "Save As".
+  (write-file path)
+
+  ;; insert file into current position
+  (insert-file-contents path)
+
+  ;; append a text block to file
+  (append-to-file start-pos end-pos path)
+
+  ;; renaming file
+  (rename-file file-name new-name)
+
+  ;; copying file
+  (copy-file old-name new-name)
+
+  ;; deleting file
+  (delete-file file-name)
+
+  ;; get dir path
+  (file-name-directory full-path)
+
+  ;; get filename part
+  (file-name-nondirectory full-path)
+
+  ;; get filename's suffix
+  (file-name-extension file-name)
+
+  ;; get filename sans suffix
+  (file-name-sans-extension file-name)
+#+END_SRC
+
+* A Simple Example
+This code shows how to insert a string, then position cursor 
+somewhere inside.
+#+BEGIN_SRC elisp
+  (defun insert-p-tag ()
+    "Insert <p></p> at cursor point."
+    (interactive)
+    (insert "<p></p>")
+    (backward-char 4))
+#+END_SRC
+
+
+
+* Reference
+http://ergoemacs.org/emacs/elisp_editing_basics.html
