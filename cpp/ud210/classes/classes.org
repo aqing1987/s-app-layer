@@ -1,0 +1,16 @@
+#+OPTIONS: ^:nil
+
+* Classes
+A class in C++ is a user defined data type. It can have data and 
+functions.
+
+The nice thing about C++ classes, the default is to make all members
+private. This means only other memebers of the class can access the
+data.
+
+*We can use functions to access the data in a class.*
+
+Functions that access and/or modify data values in classes are called
+mutators. Check this page to learn more about [[https://en.wikipedia.org/wiki/Mutator_method][Mutators]].
+
+functions in classes are also called methods.
