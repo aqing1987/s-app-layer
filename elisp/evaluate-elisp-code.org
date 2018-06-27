@@ -1,0 +1,37 @@
+#+TITLE: Evaluate Elisp Code
+#+OPTIONS: ^:nil
+
+To evaluate a single lisp expression, move your cursor to the right
+of the last closing parenthesis, and *Alt+x eval-last-sexp*
+*[Ctrl+x Ctrl+e]*
+
+To evaluate all elisp code in a text selection, *Alt+x eval-region*.
+
+Here's ways to eval elisp code, roughly in order of usefulness:
+
+|-----------------+---------------------------------------------------------+---------------------------|
+| Command Name    | Acting Area                                             | Key                       |
+|-----------------+---------------------------------------------------------+---------------------------|
+| eval-last-sexp  | the complete lisp expression to the left of cursor      | *[Ctrl+x Ctrl+e]*         |
+|-----------------+---------------------------------------------------------+---------------------------|
+| eval-defun      | the function definition block (defun) the cursor is in. |                           |
+|                 | (the elisp code must be well-indended, otherwise emacs  | *[Ctrl+Alt+x]*            |
+|                 | may have problem finding function.)                     | (only when in lisp modes) |
+|-----------------+---------------------------------------------------------+---------------------------|
+| eval-region     | text selection                                          | <>                        |
+|-----------------+---------------------------------------------------------+---------------------------|
+| eval-buffer     | whole file in current window                            | <>                        |
+|-----------------+---------------------------------------------------------+---------------------------|
+| load-file       | prompts you for a file name                             | *[L]* in dired            |
+|-----------------+---------------------------------------------------------+---------------------------|
+| eval-expression | prompts you to type code                                | *[Alt+:]*                 |
+|-----------------+---------------------------------------------------------+---------------------------|
+
+* Emacs Lisp Command Line Interface (REPL)
+*[Alt+x] ielm* to start emacs interactive emacs lisp shell.
+
+I recommend working in a buffer instead of REPL.
+
+Working in a buffer (sometimes called notebook inteface) allows 
+you to use full editing power, and eval any expression, in any 
+order, anytime, anywhere.
