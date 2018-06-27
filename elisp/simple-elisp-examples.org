@@ -1,0 +1,206 @@
+#+title: Simple Elisp Examples
+#+options: ^:nil
+
+This page shows very simple and useful emacs lisp commands that are
+shorter than 10 lines. They show you the basic programing in elisp.
+
+* Insert Text
+This code shows how to insert a string, and also position cursor
+after the insertion.
+#+BEGIN_SRC elisp
+  (defun insert-p-tag ()
+    "Insert <p></p> at cursor point."
+    (interactive)
+    (insert "<p></p>")
+    (backward-char 4))
+#+END_SRC
+You can use this code to insert your {signature, template, headers,
+footers, ...}.
+
+Put cursor at the last parenthesis, then *Alt+x eval-last-sexp* or
+*[Ctrl+x Ctrl+e]*.
+
+Then, you can call the command you just defined by name. For 
+example, *Alt+x insert-p-tag*
+
+To see a function's documentation, *Alt+x describe-functin* or
+*[Ctrl+h f]*
+
+* Insert Around Region
+This code shows how to place a string at the beginning and end of
+a region.
+#+BEGIN_SRC elisp
+  (defun wrap-markup-region (start end)
+    "Insert a markup <b></b> around a region."
+    (interactive "r")
+    (save-excursion
+      (goto-char end) (insert "</b>")
+      (goto-char start) (insert "<b>")))
+#+END_SRC
+You can use this code to add HTML begin/end tag on a selected text,
+or add brackets around a selection.
+
+* Select Current Word, Select Current Line
+This code shows you how to set a mark (select text) 
+programmatically.
+
+#+BEGIN_SRC elisp
+  ;; turn on highlight selection
+  (transient-mark-mode 1)
+
+  (defun select-current-word ()
+    "Select the word under cursor.
+  'word' here is considered any alphanumeric sequence with '_' or '-'."
+    (interactive)
+    (let (pt)
+      (skip-chars-backward "-_A-Za-z0-9")
+      (setq pt (point))
+      (skip-chars-forward "-_A-Za-z0-9")
+      (set-mark pt)))
+#+END_SRC
+
+#+BEGIN_SRC elisp
+  (transient-mark-mode 1)
+
+  (defun select-current-line ()
+    "Select the current line"
+    (interactive)
+    (end-of-line) ; move to end of line
+    (set-mark (line-beginning-position)))
+#+END_SRC
+
+* Find Replace String in Region
+Here's how to do text replacements on a region. Very useful.
+#+BEGIN_SRC elisp
+  (defun replace-greek-region (start end)
+    "Replace 'alpha' to 'α' and other greek letters in current region."
+    (interactive "r")
+    (save-restriction
+      (narrow-to-region start end)
+      (goto-char (point-min))
+      (while (search-forward " alpha" nil t) (replace-match " α" nil t))
+      (goto-char (point-min))
+      (while (search-forward " beta" nil t) (replace-match " β" nil t))
+      (goto-char (point-min))
+      (while (search-forward " gamma" nil t) (replace-match " γ" nil t))
+      ))
+#+END_SRC
+
+You can modify the code to do other replacements.
+
+* Delete Enclosed Text
+This code shows how to delete text enclosed by any pairs of
+delimiters.
+
+For example, if you are editing HTML code, suppose you have text
+*<p>something something long ...</p>* and your cursor is somewhere
+in between the tags. You want to quickly delete all texts inside
+the p tags. The following function will do. It will also, delete
+any text between quotes or parenthesis.
+#+BEGIN_SRC elisp
+  (defun delete-enclosed-text ()
+    "Delete texts between any pair of delimiters."
+    (interactive)
+    (save-excursion
+      (let (p1 p2)
+        (skip-chars-backward "^([<>“") (setq p1 (point))
+        (skip-chars-forward "^)]<>”") (setq p2 (point))
+        (delete-region p1 p2))))
+#+END_SRC
+
+* Delete Linebreaks
+This example shows how to temporarily change a pre-defined
+variable's value, then call a function whose behavior depends on
+the var.
+#+BEGIN_SRC elisp
+  (defun remove-line-breaks ()
+    "Remove line endings in current paragraph."
+    (interactive)
+    (let ((fill-column (point-max)))
+      (fill-paragraph nil)))
+#+END_SRC
+
+* Inserting a Random Number
+#+BEGIN_SRC elisp
+  (random t) ; seed it randomly
+
+  (defun insert-random-number ()
+    "Insert a random number between 0 to 999999."
+    (interactive)
+    (insert (number-to-string (random 999999))))
+#+END_SRC
+
+* Reference Lookup
+This example shows the use of *thing-at-point* and *browse-url*
+
+It will look up the word under the cursor in a online dictionary.
+#+BEGIN_SRC elisp
+  (defun word-definition-lookup ()
+    "Look up the word under cursor in a browser."
+    (interactive)
+    (browse-url
+     (concat "http://www.answers.com/main/ntquery?s=" (thing-at-point 'symbol))))
+#+END_SRC
+
+* Change Newline Character
+This example shows how to define a function that takes a file path
+and process the file.
+#+BEGIN_SRC elisp
+  (defun to-unix-eol (fPath)
+    "Change file's line ending to unix convertion."
+    (let ((myBuffer (find-file fPath)))
+      (set-buffer-file-coding-system 'unix) ; or 'mac or 'dos
+      (save-buffer)
+      (kill-buffer myBuffer)
+      ))
+#+END_SRC
+
+For example, if the file *~/readme.txt* is a Windows file, you can
+change its line ending by evaluating the following:
+#+BEGIN_SRC elisp
+  (to-unix-eol "~/readme.txt")
+#+END_SRC
+
+* Delete Current File
+This example shows command that lets you delete the current file.
+Note here that elisp is used to: {manipulate buffer, manipulate
+file, prompt user}.
+#+BEGIN_SRC elisp
+  (defun delete-current-file ()
+    "Delete the file associated with the current buffer.
+  Delete the current buffer too.
+  If no file is associated, just close buffer without prompt for save."
+    (interactive)
+    (let ((currentFile (buffer-file-name)))
+      (when (yes-or-no-p (concat "Delete file?: " currentFile))
+        (kill-buffer (current-buffer))
+        (when currentFile
+          (delete-file currentFile)))))
+#+END_SRC
+
+* Highlighting Lines
+This example shows you how to make lines containin the words
+"ERROR:" or "NOTE:" highlighted, whenever a file ending in "log" is
+opened.
+#+BEGIN_SRC elisp
+  (defun highlite-it ()
+    "Highlight certain lines..."
+    (interactive)
+    (if (equal "log" (file-name-extension (buffer-file-name)))
+        (progn
+          (highlight-lines-matching-regexp "ERROR:" 'hi-red-b)
+          (highlight-lines-matching-regexp "NOTE:" 'hi-blue-b))))
+
+  (add-hook 'find-file-hook 'highlight-it)
+#+END_SRC
+
+The *add-hook* line will make emacs call *highlite-it* whenever a
+file is opened. It works by adding the function "highlite-it" to
+the list in the variable *find-file-hook*.
+
+*find-file* is the function that open files. find-file-hook is a
+variable containing list of functions that will run when find-file
+is run.
+
+* Reference
+http://ergoemacs.org/emacs/elisp_examples.html
