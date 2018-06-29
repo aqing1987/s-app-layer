@@ -14,3 +14,69 @@ Functions that access and/or modify data values in classes are called
 mutators. Check this page to learn more about [[https://en.wikipedia.org/wiki/Mutator_method][Mutators]].
 
 functions in classes are also called methods.
+* class members
+traditionally, *setDataName* is the name we use to change data in a
+class.
+
+Traditionally, *getDataValue* is the name we use to get the data.
+* Memory Management
+Dr. Stroustrup discusses the end 'curly brace' and its role in 
+memory management.
+
+Start braces signify the start of memory management and end braces 
+cleanup.
+* constructors
+A constructor is special function that is executed whenever we create
+a new instance of the class. It is used to set initial values of data 
+members of the class. 
+
+*Constructors do not return a value, including void.*
+
+The declaration for a constructor is:
+#+BEGIN_SRC c++
+  ClassName::ClassName();
+#+END_SRC
+
+The definition of a constructor is:
+#+BEGIN_SRC c++
+ClassName::ClassName()
+{
+     dataMemberName1 = value;
+     dataMemberName2 = value;
+     ...
+}
+#+END_SRC
+* destructors
+Destructors are special class functions that are called whenever an 
+object *goes out of scope*. Just like a constructor, a destructor is 
+called automatically.
+
+Destructors cannot:
+- return a value
+- accept parameters
+
+Destructors must have the same name as the class.
+
+The destructor is identified with a tilda (~) symbol.
+
+Declaring a destructor:
+#+BEGIN_SRC c++
+  ~className()  //this is a destructor
+#+END_SRC
+
+Defining a destructor:
+#+BEGIN_SRC c++
+  classname::~classname() {
+       //tasks to be completed before going out of scope
+  }
+#+END_SRC
+
+One of the more important tasks of a destructor is releasing memory 
+that was allocated by the class constructor and member functions.
+
+
+* helper functions
+Classes can have member functions that do more than just set or get 
+data values. These helper functions can perform tasks that are often 
+requested or are easier to perform in the class itself. 
+
