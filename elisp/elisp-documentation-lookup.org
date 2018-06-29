@@ -1,0 +1,28 @@
+#+OPTIONS: ^:nil
+
+* Look Up Function Doc String
+The following function you will use often when you code elisp.
+*Alt+x describe-function* or *[Ctrl+h f]*, then type the function
+name.
+
+(if the function name is under cursor, it's the default. You don't
+need to type the name, just hit *Enter*)
+
+You can use the asterisk *\** as a wildcard when looking up 
+function doc. For example, type *[Ctrl+h f *file TAB]* and emacs
+will list all functions whose name ends in "file".
+
+Once the function's doc string page comes up, you can jump to the
+function's location in source code by clicking on underlined file
+name (or press TAB to move your cursor to the link then press
+ENTER)
+
+* Look Up Variable Doc String
+*Alt+x describe-variable* or *[Ctrl+h v]* for doc string of 
+variables.
+
+Some words (symbols) in elisp source code are variable, not 
+function.
+
+For example, *sentence-end-double-space* is a variable.
+
