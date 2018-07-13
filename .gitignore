@@ -8,3 +8,6 @@ cscope*
 
 # java ignore
 *.class
+
+# ml
+.ipynb_checkpoints/
