@@ -1,0 +1,96 @@
+#+title: how to use git and github
+#+options: ^:nil
+
+* navigating a commit history
+** introduction
+Version control is sort of like having a giant undo button for your project.
+It makes it easy to save versions of your files at different points in time. You
+can also restore previous versions and compare different version. It also makes
+it a lot easier to collaborate with other people. No more sending huge .zip files
+of your project back and forth.
+
+Learning to use Version Control is a little bit like learning to type: it's hard
+at first, but once you can do it, it makes you a lot more efficient.
+
+If you look at successful companies like Google and Facebook, you'll find that
+they all use version control internally.
+** finding diffs between larger files
+For windows, Use FC, e.g.
+#+BEGIN_SRC sh
+FC old.txt new.txt
+#+END_SRC
+
+For unix or linux, use diff, e.g.
+#+BEGIN_SRC sh
+diff -u old.txt new.txt
+#+END_SRC
+** reflections
+Many command line tools, including Git, are less useful if your files contain
+very long lines. For example, if you use *diff* to compare two files that have
+all their content on the same line, diff will only show you thta the two files
+are different. It will not be able to pinpoint the location of the difference
+for you.
+
+For this reason, it is a good idea to make sure you keep your lines reasonably
+short when writing your reflections (or other plain-text files). Many developers
+use a max line length of 80 to 120 characters.
+** manual commits in Git
+Git was created in 2005 by Linus Torvalds. Git is British slang for something
+roughly equivalent to unplesant person. Torvalds once said, I'm an egotistical
+bastard and I name all my projects after myself. First Linux, now Git.
+** using git to view history
+#+BEGIN_SRC sh
+git log
+git diff commit-ID1 commit-ID2
+#+END_SRC
+
+use git diff to see the difference between these two commits.
+** one commit per logical change
+*** how often to commit
+A good rule of thumb is to make one commit per logical change. For example, if
+you fixed a typo, then fixed a bug in a separate part of the file, you should
+use one commit for each change since they are logically separate. If you do
+this, each commit will have one purpose that can be easily understood. Git
+allows you to write a short message explaining what was changed in each commit,
+and that message will be more useful if each commit has a single logical change.
+
+*** what is a README
+Many projects contain a file named "README" that gives a general description
+of what the project does and how to use it. It's often a good idea to read
+this file before doing anything with the project, so the file is given this
+name to make users more likely to read it.
+** git commits across multiple files
+When you work on a project, you'll often have multiple files that you want to
+track together. Git calls such a collection of files a repository. When you save
+a version of your files in git, in other words, when you make a commit, you will
+save a version of every file in your respository.
+
+A commit is a snapshot of every file in your repository at the time you choose to
+make the commit.
+
+#+BEGIN_SRC sh
+$ git log --stat
+#+END_SRC
+
+*--stat* gives some statistics about which files have changed in each commit.
+
+** cloning and exploring the repo
+To clone a repository, run *git clone* followed by a space and the repository URL.
+
+The command is called *git clone* because it creates a clone of the repository.
+
+*** exiting *git log*
+To stop viewing *git log* output, press *q* (which stands for quit).
+
+*** getting colored output
+To get colored diff output, run
+#+BEGIN_SRC sh
+$ git config --global color.ui auto
+#+END_SRC
+*** using *git log* and *git diff*
+As a reminder, running *git log* will show a list of the recent commits with
+information about them, including commit IDs. Running *git diff* followed by
+two commit IDs will compare the two versions of the code in those commits.
+*** entering commit IDs
+If it is easier, you may enter the first four or more characters of the commit
+ID rather than pasting the entire ID.
