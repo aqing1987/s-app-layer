@@ -6,7 +6,7 @@ getcontext().prec = 30
 class Vector(object):
 
     CANNOT_NORMALIZE_ZERO_VECTOR_MSG = 'Cannot normalize the zero vector'
-    
+
     def __init__(self, coordinates):
         try:
             if not coordinates:
@@ -42,9 +42,17 @@ class Vector(object):
         except ZeroDivisionError:
             raise Exception('Cannot normalize the zero vector')
 
-        #mag = self.magnitude()
-        #new_coordinates = [x/mag for x in self.coordinates]
-        #return Vector(new_coordinates)
+    def is_zero(self, tolerance=1e-10):
+        return self.magnitude() < tolerance
+
+    def is_orthogonal_to(self, v, tolerance=1e-10):
+        return abs(self.dot(v)) < tolerance
+
+    def is_parallel_to(self, v):
+        return (self.is_zero()
+                or v.is_zero()
+                or self.angle_with(v) == 0
+                or self.angle_with(v) == pi)
 
     def dot(self, v):
         return sum([x*y for x, y in zip(self.coordinates, v.coordinates)])
@@ -53,7 +61,15 @@ class Vector(object):
         try:
             u1 = self.normalized()
             u2 = v.normalized()
-            angle_in_radians = acos(u1.dot(u2))
+            dot_v = u1.dot(u2)
+            tolerance = 1e-10
+            if (abs(dot_v - 1) < tolerance):
+                dot_v = 1
+
+            if (abs(dot_v + 1) < tolerance):
+                dot_v = -1
+
+            angle_in_radians = acos(dot_v)
 
             if in_degrees:
                 degrees_per_radians = 180. / pi
@@ -66,7 +82,7 @@ class Vector(object):
                 raise Exception('Cannot compute an angle with the zero vector')
             else:
                 raise e
-    
+
     # The str function gives us the ability to print out the
     # coordinates of the vector using Python's built in print
     # function
@@ -75,52 +91,3 @@ class Vector(object):
 
     def __eq__(self, v):
         return self.coordinates == v.coordinates
-
-# my_vector = Vector([1, 2, 3])
-# print(my_vector)
-
-# my_vector2 = Vector([1, 2, 3])
-# my_vector3 = Vector([-1, 2, 3])
-# print(my_vector == my_vector2)
-# print(my_vector2 == my_vector3)
-
-# v = Vector([8.218, -9.341])
-# w = Vector([-1.129, 2.111])
-# print(v.plus(w))
-
-# v = Vector([7.119, 8.215])
-# w = Vector([-8.223, 0.878])
-# print(v.minus(w))
-
-# v = Vector([1.671, -1.012, -0.318])
-# c = 7.41
-# print(v.times_scalar(c))
-
-## 2
-# v = Vector([-0.221, 7.437])
-# print(v.magnitude())
-
-# v = Vector([8.813, -1.331, -6.247])
-# print(v.magnitude())
-
-# v = Vector([5.581, -2.136])
-# print(v.normalized())
-
-# v = Vector([1.996, 3.108, -4.554])
-# print(v.normalized())
-
-#v = Vector([0, 0])
-#print(v.normalized())
-
-v = Vector([7.887, 4.138])
-w = Vector([-8.802, 6.776])
-print(v.dot(w))
-
-v = Vector([3.183, -7.627])
-w = Vector([-2.668, 5.319])
-print(v.angle_with(w))
-
-v = Vector([7.35, 0.221, 5.188])
-w = Vector([2.751, 8.259, 3.985])
-print(v.angle_with(w, in_degrees=True))
-
