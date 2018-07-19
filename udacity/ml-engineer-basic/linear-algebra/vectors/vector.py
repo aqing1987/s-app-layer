@@ -35,12 +35,12 @@ class Vector(object):
 
     def magnitude(self):
         coordinates_squared = [x**2 for x in self.coordinates]
-        return sqrt(sum(coordinates_squared))
+        return Decimal(sqrt(sum(coordinates_squared)))
 
     def normalized(self):
         try:
             magnitude = self.magnitude()
-            return self.times_scalar(1./magnitude)
+            return self.times_scalar(Decimal('1.0')/magnitude)
         except ZeroDivisionError:
             raise Exception('Cannot normalize the zero vector')
 
@@ -105,6 +105,33 @@ class Vector(object):
                 raise Exception('Cannot compute an angle with the zero vector')
             else:
                 raise e
+
+    def cross(self, v):
+        try:
+            x1, y1, z1 = self.coordinates
+            x2, y2, z2 = v.coordinates
+            x = y1*z2 - y2*z1
+            y = -(x1*z2 - x2*z1)
+            z = x1*y2 - x2*y1
+            return Vector([x, y, z])
+        except ValueError as e:
+            msg = str(e)
+            if msg == 'need more than 2 values to unpack':
+                self_embedded_in_R3 = Vector(self.coordinates + ('0',))
+                v_embedded_in_R3 = Vector(self.coordinates + ('0',))
+                return self_embedded_in_R3.cross(v_embedded_in_R3)
+            elif (msg == 'too many values to unpack' or
+                  msg == 'need more than 1 value to unpack'):
+                raise Exception(self.ONLY_DEFINED_IN_TWO_THREE_DIMS_MSG)
+            else:
+                raise e
+
+    def area_parallelogram(self, v):
+        cross_product = self.cross(v)
+        return cross_product.magnitude()
+
+    def area_triangle(self, v):
+        return self.area_parallelogram(v) / Decimal('2.0')
 
     # The str function gives us the ability to print out the
     # coordinates of the vector using Python's built in print
