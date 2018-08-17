@@ -1,0 +1,31 @@
+#+OPTIONS: ^:nil
+
+* Obtaining PID of peer connected to a Unix domain socket
+A program that listens on a Unix domain socket can accept obtain
+the client credentials (pid, uid, gid).
+
+
+** Easy way
+The easy way is for the server to call getsockopt on an accepted
+client socket.
+#+BEGIN_SRC c
+  getsockopt(fd, SOL_SOCKET, SO_PEERCRED, ...)
+#+END_SRC
+
+as shown in recv-easy.c.
+
+#+BEGIN_SRC sh
+  % ./recv-easy  # in window 1
+  % ./send-easy  # in window 2
+#+END_SRC
+
+On window 1 you'll see messages like this:
+#+BEGIN_SRC sh
+  Credentials from SO_PEERCRED: pid=31807, euid=1000, egid=1000
+#+END_SRC
+
+The man page for socket(7) notes
+#+BEGIN_QUOTE
+The returned credentials are those that were in effect at the
+time of the call to connect(2).
+#+END_QUOTE
